@@ -1,5 +1,5 @@
-from base import *
-from first_level import FirstLevel
+from classes.base import *
+from classes.first_level import FirstLevel
 
 
 class Map:
