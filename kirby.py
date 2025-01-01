@@ -52,7 +52,7 @@ class Kirby(pygame.sprite.Sprite):
         self.direction = v1.normalize() if v1.length() > 0 else v1
         self.rect.x += self.direction.x * self.speed
         self.check_collision('x')
-        self.rect.y += self.direction.y * self.g
+        self.rect.y += self.direction.y * self.speed
         self.check_collision('y')
 
         if keys[pygame.K_SPACE]:
