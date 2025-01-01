@@ -4,7 +4,7 @@ from classes.first_level import FirstLevel
 
 class Map:
     def __init__(self):
-        self.tmx_map = {0:load_pygame('tmx_files\\map.tmx')} # непоянтно почему я не могу прописать путь к папке
+        self.tmx_map = {0:load_pygame('tmx_files\\map.tmx')}
         self.current_level = FirstLevel(self.tmx_map[0])
 
     def run(self):
