@@ -2,8 +2,6 @@ from classes.base import *
 
 
 class Kirby(pygame.sprite.Sprite):
-    '''класс, отвечающий за отрисовку спрайтов на уровне для удобства разработчика'''
-
     def __init__(self, pos, groups, obstacle_sprites):
         super().__init__(groups)
 
