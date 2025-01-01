@@ -15,7 +15,11 @@ class Kirby(pygame.sprite.Sprite):
 
         self.direction = pygame.math.Vector2()
         self.speed = 1
-        self.g = 700 # чтобы персонаж не мог улетать
+
+        self.g = 0.25 # чтобы персонаж не мог улетать
+        self.jump_speed = -3 # чтобы прыжок мог осуществляться если перс на земле
+        # минус тк у нас компьютерная сис-ма отсчета
+        self.v = 0 # (СКОРОСТЬ ПО ВЕРТ)
 
     def check_collision(self, case):
         for item in self.obstacle_sprites:
@@ -29,9 +33,9 @@ class Kirby(pygame.sprite.Sprite):
                 elif case == 'y':
                     if self.rect.bottom >= item.rect.top >= self.last_rect.top:
                         self.rect.bottom = item.rect.top
+                        self.v = 0 # сброс скорости тк кирби должна падать вниз
                     elif self.rect.top <= item.rect.bottom <= self.last_rect.bottom:
                         self.rect.top = item.rect.bottom
-                self.direction.y = 0
 
 
     def move(self):
@@ -51,10 +55,15 @@ class Kirby(pygame.sprite.Sprite):
         self.rect.x += self.direction.x * self.speed
         self.check_collision('x')
         self.rect.y += self.direction.y * self.speed
+
+        # Гравитация
+        self.v += self.g
+        self.rect.y += self.v
+
         self.check_collision('y')
 
-        if keys[pygame.K_SPACE]:
-            self.attacking = True
+        if keys[pygame.K_SPACE] and self.v == 0:
+            self.v = self.jump_speed # движение вверх
 
     def update(self):
         self.move()
