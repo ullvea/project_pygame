@@ -5,11 +5,11 @@ import pygame
 import sys
 from pytmx import *
 
-size = width, height = 768,  240  # 768, 240
+size = width, height = 768,  166  # 768, 240
 screen = pygame.display.set_mode((width, height))
 ANIMATION_SPEED = 6
 fps = 60
-TILE_SIZE = 8
+TILE_SIZE = 16
 
 obstacles = pygame.sprite.Group()  # препятствия с англ
 

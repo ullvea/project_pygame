@@ -10,7 +10,7 @@ class FirstLevel:
         self.tmx(tmx_map)
 
     def run(self):
-        image = load_image("Mushroom_Forest_Zone_Layout_now.png")
+        image = load_image("NES - Kirbys Adventure - Vegetable Valley 1 Room A.png")
         screen.blit(image,(0,0))
         #self.camera.update(self.kirby)
         #for sprite in self.all_sprites:
