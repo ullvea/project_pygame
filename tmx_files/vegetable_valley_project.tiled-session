@@ -1,0 +1,37 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "map_vegetable_vallue.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 182.33333333333331,
+                "y": 74.33333333333331
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/User/PycharmProjects/pygame_project/tmx_files",
+    "map.height": 11,
+    "map.lastUsedFormat": "tmx",
+    "map.renderOrder": null,
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 64,
+    "openFiles": [
+    ],
+    "project": "vegetable_valley_project.tiled-project",
+    "recentFiles": [
+        "map_vegetable_vallue.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
