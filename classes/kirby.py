@@ -5,14 +5,13 @@ class Kirby(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites):
         super().__init__(groups)
 
-        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
-        self.image.fill('pink')
+        self.image = load_image('Kirby_character.png', [(98, 130, 179), (116, 154, 212), (111, 147, 201)])
         self.rect = self.image.get_rect(topleft=pos)
         self.last_rect = self.rect.copy()
         self.obstacle_sprites = obstacle_sprites
 
         self.direction = pygame.math.Vector2()
-        self.speed = 1
+        self.speed = 5
 
         self.g = 0.25 # чтобы персонаж не мог улетать
         self.jump_speed = -3 # чтобы прыжок мог осуществляться если перс на земле
@@ -62,6 +61,16 @@ class Kirby(pygame.sprite.Sprite):
 
         if keys[pygame.K_SPACE] and self.v == 0:
             self.v = self.jump_speed # движение вверх
+
+            # Проверка границ экрана
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > width:  # SCREEN_WIDTH - ширина окна
+            self.rect.right = width
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > height:  # SCREEN_HEIGHT - высота окна
+            self.rect.bottom = height
 
     def update(self):
         self.move()

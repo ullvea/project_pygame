@@ -10,12 +10,13 @@ class FirstLevel:
         self.tmx(tmx_map)
 
     def run(self):
-        image = load_image("NES - Kirbys Adventure - Vegetable Valley 1 Room A.png")
-        screen.blit(image,(0,0))
-        #self.camera.update(self.kirby)
-        #for sprite in self.all_sprites:
-            #self.camera.apply(sprite)
+        #image = load_image("NES - Kirbys Adventure - Vegetable Valley 1 Room A.png")
+        #screen.blit(image,(0,0))
+        self.camera.update(self.kirby)
+        for sprite in self.all_sprites:
+            self.camera.apply(sprite)
         self.all_sprites.update()
+        screen.fill((255,0,0))
         self.all_sprites.draw(self.surface)
 
     def tmx(self, tmx_map):
@@ -24,4 +25,4 @@ class FirstLevel:
             Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, (self.all_sprites, self.obstacle_sprites))
 
         for obj in tmx_map.get_layer_by_name('main'):
-            self.kirby = Kirby((obj.x // 4, obj.y // 4), self.all_sprites, self.obstacle_sprites)
+            self.kirby = Kirby((obj.x, obj.y), self.all_sprites, self.obstacle_sprites)
