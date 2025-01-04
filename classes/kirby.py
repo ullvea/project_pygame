@@ -5,10 +5,10 @@ class Kirby(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites):
         super().__init__(groups)
 
-        self.start_pos = pos
         self.image = load_image('Kirby_character.png',
                                 [(98, 130, 179), (116, 154, 212), (111, 147, 201)])
         self.rect = self.image.get_rect(topleft=pos)
+        self.start_pos = [self.rect.x, self.rect.y]
         self.last_rect = self.rect.copy()
 
         self.moving_animation = AnimatedSprite(load_image("moving_animation.png", [(98, 130, 179),
@@ -31,6 +31,7 @@ class Kirby(pygame.sprite.Sprite):
         # минус тк у нас компьютерная сис-ма отсчета
         self.v = 0  # СКОРОСТЬ ПО ВЕРТКАЛИ
 
+
     def animation(self):
         '''Функция отвечает за смену анимации при каком-либо роде действий'''
         if self.is_moving:
@@ -38,8 +39,6 @@ class Kirby(pygame.sprite.Sprite):
             self.moving_animation.update()
         else:
             self.image = self.standing_animation
-
-
 
 
     def check_collision(self, case):
@@ -91,14 +90,14 @@ class Kirby(pygame.sprite.Sprite):
         self.check_collision('y')
 
         # Проверка границ экрана(надо сделать адекватно)
-        if self.rect.left > self.start_pos[0]:
-            self.rect.left = self.start_pos[0]
+        '''if self.rect.x < self.start_pos[0]:
+            self.rect.x = self.start_pos[0]
         if self.rect.right > width:
             self.rect.right = width
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > height:
-            self.rect.bottom = height
+            self.rect.bottom = height'''
 
     def update(self):
         self.move()
