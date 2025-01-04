@@ -10,8 +10,6 @@ class FirstLevel:
         self.tmx(tmx_map)
 
     def run(self):
-        #image = load_image("NES - Kirbys Adventure - Vegetable Valley 1 Room A.png")
-        #screen.blit(image,(0,0))
         self.camera.update(self.kirby)
         for sprite in self.all_sprites:
             self.camera.apply(sprite)
@@ -23,6 +21,9 @@ class FirstLevel:
         '''функция, добавляющая cпрайты в группу'''
         for x, y, surf in tmx_map.get_layer_by_name('Surface').tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, (self.all_sprites, self.obstacle_sprites))
+
+        for x, y, surf in tmx_map.get_layer_by_name('beautiful_background').tiles():
+            Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
 
         for obj in tmx_map.get_layer_by_name('main'):
             self.kirby = Kirby((obj.x, obj.y), self.all_sprites, self.obstacle_sprites)

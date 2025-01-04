@@ -5,14 +5,13 @@ import pygame
 import sys
 from pytmx import *
 
-size = width, height = 700,  300  # 768, 240
+size = width, height = 700, 500
 screen = pygame.display.set_mode((width, height))
-screen.fill((255,0,0))
-ANIMATION_SPEED = 6
-fps = 60
+fps = 20
 TILE_SIZE = 16
 
-obstacles = pygame.sprite.Group()  # препятствия с англ
+obstacles = pygame.sprite.Group()
+animated_sprites = pygame.sprite.Group()
 
 
 def load_image(name, colorkeys=None):
@@ -24,7 +23,7 @@ def load_image(name, colorkeys=None):
     image = pygame.image.load(fullname).convert_alpha()  # Загружаем изображение с альфа-каналом
     if colorkeys:
         width_im, height_im = image.get_size()
-        pixels = pygame.surfarray.pixels3d(image)
+        pixels = pygame.surfarray.pixels3d(image) # Привязка пикселей к 3D-массиву
         # Проходим по всем пикселям и заменяем указанные цвета на прозрачные
         for x in range(width_im):
             for y in range(height_im):
@@ -61,3 +60,26 @@ class Camera:
     def update(self, target):
         self.dx = -(target.rect.x + target.rect.w // 8 - width // 8)
         self.dy = -(target.rect.y + target.rect.h // 1.5 - height // 1.5)
+
+
+class AnimatedSprite(pygame.sprite.Sprite):
+    def __init__(self, sheet, columns, rows, x, y):
+        super().__init__(animated_sprites)
+        self.frames = []
+        self.cut_sheet(sheet, columns, rows)
+        self.cur_frame = 0
+        self.image = self.frames[self.cur_frame]
+        self.rect = self.rect.move(x, y)
+
+    def cut_sheet(self, sheet, columns, rows):
+        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
+                                sheet.get_height() // rows)
+        for j in range(rows):
+            for i in range(columns):
+                frame_location = (self.rect.w * i, self.rect.h * j)
+                self.frames.append(sheet.subsurface(pygame.Rect(
+                    frame_location, self.rect.size)))
+
+    def update(self):
+        self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+        self.image = self.frames[self.cur_frame]
