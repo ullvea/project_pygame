@@ -8,7 +8,6 @@ class Kirby(pygame.sprite.Sprite):
         self.image = load_image('Kirby_character.png',
                                 [(98, 130, 179), (116, 154, 212), (111, 147, 201)])
         self.rect = self.image.get_rect(topleft=pos)
-        self.start_pos = [self.rect.x, self.rect.y]
         self.last_rect = self.rect.copy()
 
         self.moving_animation = AnimatedSprite(load_image("moving_animation.png", [(98, 130, 179),
@@ -57,6 +56,7 @@ class Kirby(pygame.sprite.Sprite):
                     elif self.rect.top <= item.rect.bottom <= self.last_rect.bottom:
                         self.rect.top = item.rect.bottom
 
+
     def move(self):
         keys = pygame.key.get_pressed()
         v1 = pygame.math.Vector2(0, 0)
@@ -89,15 +89,6 @@ class Kirby(pygame.sprite.Sprite):
 
         self.check_collision('y')
 
-        # Проверка границ экрана(надо сделать адекватно)
-        '''if self.rect.x < self.start_pos[0]:
-            self.rect.x = self.start_pos[0]
-        if self.rect.right > width:
-            self.rect.right = width
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.bottom > height:
-            self.rect.bottom = height'''
 
     def update(self):
         self.move()

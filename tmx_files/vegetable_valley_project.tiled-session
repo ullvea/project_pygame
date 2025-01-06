@@ -7,12 +7,24 @@
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "Kirby_character.tsx": {
+            "scaleInDock": 1
+        },
+        "Vegetable_Valley_1_Room_A_tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "for_surface_tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "for_surface_tiles_2.tsx": {
+            "scaleInDock": 1
+        },
         "map_vegetable_vallue.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 1,
+            "scale": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 182.33333333333331,
-                "y": 74.33333333333331
+                "x": 96,
+                "y": 252.5
             }
         }
     },

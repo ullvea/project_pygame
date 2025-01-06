@@ -7,7 +7,7 @@ from pytmx import *
 
 size = width, height = 700, 525
 screen = pygame.display.set_mode((width, height))
-fps = 20
+fps = 30
 TILE_SIZE = 16
 
 obstacles = pygame.sprite.Group()
@@ -47,9 +47,10 @@ class Sprite(pygame.sprite.Sprite):
 
 class Camera:
     # зададим начальный сдвиг камеры
-    def __init__(self):
+    def __init__(self, flag=True):
         self.dx = 0
         self.dy = 0
+        self.flag = flag
 
     # сдвинуть объект obj на смещение камеры
     def apply(self, obj):
@@ -58,8 +59,9 @@ class Camera:
 
     # позиционировать камеру на объекте target
     def update(self, target):
-        self.dx = -(target.rect.x + target.rect.w // 8 - width // 8)
-        self.dy = -(target.rect.y + target.rect.h // 1.5 - height // 1.5)
+        if self.flag:
+            self.dx = -(target.rect.x + target.rect.w // 8 - width // 8)
+            self.dy = -(target.rect.y + target.rect.h // 1.5 - height // 1.5)
 
 
 class AnimatedSprite(pygame.sprite.Sprite):
