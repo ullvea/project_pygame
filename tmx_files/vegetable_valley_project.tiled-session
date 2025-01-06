@@ -3,8 +3,9 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "map_vegetable_vallue.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
         "Kirby_character.tsx": {
@@ -23,8 +24,8 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 96,
-                "y": 252.5
+                "x": 401.5,
+                "y": 237.5
             }
         }
     },
@@ -36,6 +37,7 @@
     "map.tileWidth": 16,
     "map.width": 64,
     "openFiles": [
+        "map_vegetable_vallue.tmx"
     ],
     "project": "vegetable_valley_project.tiled-project",
     "recentFiles": [

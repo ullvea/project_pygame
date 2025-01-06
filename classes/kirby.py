@@ -2,7 +2,7 @@ from classes.base import *
 
 
 class Kirby(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, obstacle_sprites):
+    def __init__(self, pos, groups, obstacle_sprites, confines_sprites):
         super().__init__(groups)
 
         self.image = load_image('Kirby_character.png',
@@ -21,6 +21,7 @@ class Kirby(pygame.sprite.Sprite):
         self.is_standing = True
 
         self.obstacle_sprites = obstacle_sprites
+        self.confines_sprites = confines_sprites
 
         self.direction = pygame.math.Vector2()
         self.speed = 5
@@ -55,6 +56,13 @@ class Kirby(pygame.sprite.Sprite):
                         self.v = 0  # сброс скорости тк кирби должна падать вниз
                     elif self.rect.top <= item.rect.bottom <= self.last_rect.bottom:
                         self.rect.top = item.rect.bottom
+
+        for item in self.confines_sprites:
+            if self.rect.left > item.rect.left:
+                camera.flag = False
+                return
+            else:
+                camera.flag = True
 
 
     def move(self):

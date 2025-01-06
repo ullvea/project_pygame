@@ -7,13 +7,12 @@ class FirstLevel:
         self.all_sprites = pygame.sprite.Group()
         self.obstacle_sprites = pygame.sprite.Group()
         self.confines_sprites = pygame.sprite.Group() # группа спрайтов, отвечающая за ограничение камеры
-        self.camera = Camera()
         self.tmx(tmx_map)
 
     def run(self):
-        self.camera.update(self.kirby)
+        camera.update(self.kirby)
         for sprite in self.all_sprites:
-            self.camera.apply(sprite)
+            camera.apply(sprite)
         self.all_sprites.update()
         screen.fill((60, 188, 252))
         self.all_sprites.draw(self.surface)
@@ -27,8 +26,8 @@ class FirstLevel:
             Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
 
         for x, y, surf in tmx_map.get_layer_by_name('stop_camera').tiles():
-            Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, self.confines_sprites)
+            Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, (self.all_sprites, self.confines_sprites))
 
         for obj in tmx_map.get_layer_by_name('main'):
-            self.kirby = Kirby((obj.x, obj.y), self.all_sprites, self.obstacle_sprites)
+            self.kirby = Kirby((obj.x, obj.y), self.all_sprites, self.obstacle_sprites, self.confines_sprites)
 
