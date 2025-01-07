@@ -24,10 +24,10 @@
         },
         "map_vegetable_vallue.tmx": {
             "scale": 1,
-            "selectedLayer": 4,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 159,
-                "y": 124.5
+                "x": 234.5,
+                "y": 123.5
             }
         },
         "map_vegetable_vallue.tmx#Kirby_character": {

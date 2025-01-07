@@ -26,10 +26,10 @@ class Kirby(pygame.sprite.Sprite):
         self.orientation = True  # Флаг, отвечающий за направление движения
 
         # Флаги, отвечающие за то, какую анимацию включать
-        self.is_starting_fly = False
         self.is_flying = False
         self.is_moving = False
         self.is_standing = True
+        self.is_starting_fly = True
 
         self.obstacle_sprites = obstacle_sprites
         self.confines_sprites = confines_sprites
