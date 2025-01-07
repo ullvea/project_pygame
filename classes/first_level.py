@@ -1,12 +1,15 @@
 from classes.base import *
 from classes.kirby import Kirby
+from classes.waddle_doo import WaddleDoo
+
 
 class FirstLevel:
     def __init__(self, tmx_map):
         self.surface = pygame.display.get_surface()
         self.all_sprites = pygame.sprite.Group()
-        self.obstacle_sprites = pygame.sprite.Group()
+        self.obstacle_sprites = pygame.sprite.Group() # группа спрайтов, отвечающая за поверхность (препятствия)
         self.confines_sprites = pygame.sprite.Group() # группа спрайтов, отвечающая за ограничение камеры
+        self.waddle_doo_sprites = pygame.sprite.Group()
         self.tmx(tmx_map)
 
     def run(self):
@@ -30,4 +33,7 @@ class FirstLevel:
 
         for obj in tmx_map.get_layer_by_name('main'):
             self.kirby = Kirby((obj.x, obj.y), self.all_sprites, self.obstacle_sprites, self.confines_sprites)
+
+        for obj in tmx_map.get_layer_by_name('enemies'):
+            self.waddle_doo = WaddleDoo((obj.x, obj.y), self.all_sprites, self.obstacle_sprites)
 

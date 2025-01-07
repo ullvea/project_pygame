@@ -50,6 +50,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.cur_frame = 0
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(x, y)
+        self.animation_complete = False
 
     def cut_sheet(self, sheet, columns, rows):
         self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
@@ -63,6 +64,9 @@ class AnimatedSprite(pygame.sprite.Sprite):
     def update(self):
         self.cur_frame = (self.cur_frame + 1) % len(self.frames)
         self.image = self.frames[self.cur_frame]
+
+    def is_finished(self):
+        return self.animation_complete
 
 
 obstacles = pygame.sprite.Group()

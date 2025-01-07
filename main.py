@@ -4,7 +4,7 @@ from classes.first_level import FirstLevel
 
 class Map:
     def __init__(self):
-        self.tmx_map = {0:load_pygame('tmx_files\\map_vegetable_vallue.tmx')}
+        self.tmx_map = {0: load_pygame('tmx_files\\map_vegetable_vallue.tmx')}
         self.current_level = FirstLevel(self.tmx_map[0])
 
     def run(self):
