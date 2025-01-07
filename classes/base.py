@@ -7,7 +7,7 @@ from pytmx import *
 
 size = width, height = 700, 525
 screen = pygame.display.set_mode((width, height))
-fps = 30
+fps = 25
 TILE_SIZE = 16
 
 

@@ -4,8 +4,9 @@ from classes.base import *
 class Kirby(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites, confines_sprites):
         super().__init__(groups)
-        self.orientation = True
-        colorkeys = [(98, 130, 179), (116, 154, 212), (111, 147, 201), (84, 110, 140)]
+        colorkeys = ((84, 110, 140), (86, 113, 145), (86, 113, 146), (98, 130, 179), (107, 142, 196), (108, 143, 194),
+                     (109, 144, 199), (110, 146, 199), (111, 147, 201), (113, 151, 206), (114, 152, 209),
+                     (116, 154, 212))
 
         self.image = load_image('Kirby_character.png', colorkeys)
 
@@ -14,14 +15,17 @@ class Kirby(pygame.sprite.Sprite):
 
         self.standing_animation = load_image('Kirby_character.png', colorkeys)
         self.moving_animation = AnimatedSprite(load_image("moving_animation.png", colorkeys),
-                                                        4, 1, 76, 16)
+                                               4, 1, 76, 16)
         self.start_fly_animation = AnimatedSprite(load_image("Kirby_start_fly.png", colorkeys),
-                                                        4, 1, 84, 24)
-
-
+                                                  4, 1, 84, 24)
         self.fly_animation = AnimatedSprite(load_image("Kirby_fly.png", colorkeys),
-                                                        2, 1, 52, 24)
+                                            2, 1, 52, 24)
+        self.end_fly_animation = AnimatedSprite(load_image("Kirby_end_fly.png", colorkeys),
+                                                2, 1, 52, 24)
 
+        self.orientation = True  # Флаг, отвечающий за направление движения
+
+        # Флаги, отвечающие за то, какую анимацию включать
         self.is_starting_fly = False
         self.is_flying = False
         self.is_moving = False
@@ -34,19 +38,32 @@ class Kirby(pygame.sprite.Sprite):
         self.speed = 5
 
         self.g = 0.25  # чтобы персонаж не мог улетать
-        self.jump_speed = -3  # чтобы прыжок мог осуществляться, если персонаж на земле
+        self.jump_speed = -1.5  # чтобы прыжок мог осуществляться, если персонаж на земле
         # минус тк у нас компьютерная сис-ма отсчета
-        self.v = 0  # СКОРОСТЬ ПО ВЕРТКАЛИ
+        self.v = 0  # скорость по вертикали
 
+        # Таймер для анимации
+        self.animation_timer = 0
+        self.animation_delay = 125
 
     def animation(self):
-        '''Функция отвечает за смену анимации при каком-либо роде действий'''
-        if self.is_moving:
+        ''' Функция отвечает за смену анимации при каком-либо роде действий  '''
+        current_time = pygame.time.get_ticks()
+        if self.is_flying:
+            if current_time - self.animation_timer > self.animation_delay:
+                self.image = self.fly_animation.image
+                self.fly_animation.update()
+                self.animation_timer = current_time  # Сбрасываем таймер
+                self.mirror()
+        elif self.is_moving:
             self.image = self.moving_animation.image
             self.moving_animation.update()
+            self.mirror()
         else:
             self.image = self.standing_animation
+            self.mirror()
 
+    def mirror(self):
         if not self.orientation:  # Зеркалим изображение взависимости от направления
             self.image = pygame.transform.flip(self.image, True, False)
 
@@ -59,22 +76,24 @@ class Kirby(pygame.sprite.Sprite):
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             v1.x -= 1
             self.is_moving = True
-            self.orientation = False  # Хочется чтобы этот флаг использовался для отзеркаливания картинок
+            self.orientation = False
         elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             v1.x += 1
             self.is_moving = True
             self.orientation = True
         elif keys[pygame.K_UP] or keys[pygame.K_w]:
-            v1.y -= 1
-        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            self.v = self.jump_speed  # движение вверх
+            self.is_flying = True
+        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:  # мб анимация подката...
             v1.y += 1
             self.is_moving = False
             self.is_standing = False
-        elif keys[pygame.K_SPACE] and self.v == 0:  # Это будет изменено под поедание врагов
+        elif keys[pygame.K_SPACE] and self.v == 0:  # Прыжок
             self.v = self.jump_speed  # движение вверх
         else:
             self.is_moving = False
             self.is_standing = True
+            self.is_flying = False
 
         self.direction = v1.normalize() if v1.length() > 0 else v1
         self.rect.x += self.direction.x * self.speed
@@ -86,7 +105,6 @@ class Kirby(pygame.sprite.Sprite):
         self.rect.y += self.v
 
         self.check_collision('y')
-
 
     def check_collision(self, case):
         for item in self.obstacle_sprites:
@@ -110,7 +128,6 @@ class Kirby(pygame.sprite.Sprite):
                 return
             else:
                 camera.flag = True
-
 
     def update(self):
         self.move()
