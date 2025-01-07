@@ -26,7 +26,7 @@ class FirstLevel:
             Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, (self.all_sprites, self.obstacle_sprites))
 
         for x, y, surf in tmx_map.get_layer_by_name('tiles_for_waddle_doo').tiles():
-            Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, (self.waddle_doo_sprites))
+            Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, (self.waddle_doo_sprites, self.all_sprites))
 
         for x, y, surf in tmx_map.get_layer_by_name('beautiful_background').tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
@@ -39,4 +39,4 @@ class FirstLevel:
 
         for obj in tmx_map.get_layer_by_name('enemies'):
             if obj.name == 'waddle_doo':
-                WaddleDoo((obj.x, obj.y), self.all_sprites, self.waddle_doo_sprites)
+                self.waddle_doo = WaddleDoo((obj.x, obj.y), self.all_sprites, self.waddle_doo_sprites)
