@@ -50,7 +50,6 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.cur_frame = 0
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(x, y)
-        self.animation_complete = False
 
     def cut_sheet(self, sheet, columns, rows):
         self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
@@ -65,9 +64,6 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.cur_frame = (self.cur_frame + 1) % len(self.frames)
         self.image = self.frames[self.cur_frame]
 
-    def is_finished(self):
-        return self.animation_complete
-
 
 obstacles = pygame.sprite.Group()
 animated_sprites = pygame.sprite.Group()
@@ -75,6 +71,7 @@ camera = Camera()
 
 
 def load_image(name, colorkeys=None):
+    '''Функция для загрузки изображений с обесцвечиванием нескольких цветов'''
     fullname = os.path.join('data', name)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
@@ -88,6 +85,6 @@ def load_image(name, colorkeys=None):
         for x in range(width_im):
             for y in range(height_im):
                 if tuple(pixels[x][y]) in colorkeys:
-                    # Устанавливаем альфа-канал в 0 (прозрачный)
+                    # Делаем альфа-канал в прозрачным
                     image.set_at((x, y), (0, 0, 0, 0))  # RGBA: (R, G, B, A)
     return image
