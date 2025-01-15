@@ -8,12 +8,11 @@ from pytmx import *
 size = width, height = 700, 525
 screen = pygame.display.set_mode((width, height))
 fps = 25
-TILE_SIZE = 16
+TILE_SIZE = 32
 
 
 class Sprite(pygame.sprite.Sprite):
     '''класс, отвечающий за отрисовку спрайтов на уровне для удобства разработчика'''
-
     def __init__(self, pos, surf, groups):
         super().__init__(groups)
         self.image = surf
@@ -70,18 +69,19 @@ animated_sprites = pygame.sprite.Group()
 camera = Camera()
 
 
-def load_image(name, colorkeys=None):
+def load_image(name, colorkeys=None, scale=2):
     '''Функция для загрузки изображений с обесцвечиванием нескольких цветов'''
     fullname = os.path.join('data', name)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
-
-    image = pygame.image.load(fullname).convert_alpha()  # Загружаем изображение с альфа-каналом
+    image = pygame.image.load(fullname)  # Загружаем изображение
+    width, height = image.get_size()
+    image = pygame.transform.scale(image, (width * scale, height * scale))  # Меняем размеры изображения
+    image = image.convert_alpha()  # Загружаем изображение с альфа-каналом
     if colorkeys:
         width_im, height_im = image.get_size()
         pixels = pygame.surfarray.pixels3d(image)  # Привязка пикселей к 3D-массиву
-        # Проходим по всем пикселям и заменяем указанные цвета на прозрачные
         for x in range(width_im):
             for y in range(height_im):
                 if tuple(pixels[x][y]) in colorkeys:

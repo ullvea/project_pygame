@@ -16,8 +16,8 @@ class Kirby(pygame.sprite.Sprite):
         self.standing_animation = load_image('Kirby_character.png', colorkeys)
         self.moving_animation = AnimatedSprite(load_image("moving_animation.png", colorkeys),
                                                4, 1, 76, 16)
-        self.start_fly_animation = AnimatedSprite(load_image("Kirby_start_fly.png", colorkeys),
-                                                  4, 1, 84, 24)
+        self.start_fly_animation = AnimatedSprite(load_image("Kirby_start_fly1.png", colorkeys),
+                                                  4, 1, 92, 24)
         self.fly_animation = AnimatedSprite(load_image("Kirby_fly.png", colorkeys),
                                             2, 1, 52, 24)
         self.end_fly_animation = AnimatedSprite(load_image("Kirby_end_fly.png", colorkeys),
@@ -29,41 +29,54 @@ class Kirby(pygame.sprite.Sprite):
         self.is_flying = False
         self.is_moving = False
         self.is_standing = True
-        self.is_starting_fly = True
+        self.is_flying_ending = False
+        self.is_jumping = True
 
         self.obstacle_sprites = obstacle_sprites
         self.confines_sprites = confines_sprites
 
         self.direction = pygame.math.Vector2()
-        self.speed = 5
+        self.speed = 6
 
         self.g = 0.25  # чтобы персонаж не мог улетать
-        self.jump_speed = -1.5  # чтобы прыжок мог осуществляться, если персонаж на земле
         # минус тк у нас компьютерная сис-ма отсчета
         self.v = 0  # скорость по вертикали
 
         # Таймер для анимации
         self.animation_timer = 0
-        self.animation_delay = 125
+        self.animation_delay = 750
+        self.animation_delay_fly = 75
+        self.extra_animation_timer = self.animation_delay_fly * len(self.start_fly_animation.frames)
 
     def animation(self):
         ''' Функция отвечает за смену анимации при каком-либо роде действий  '''
         current_time = pygame.time.get_ticks()
         if self.is_flying:
-            if current_time - self.animation_timer > self.animation_delay:
+            if self.extra_animation_timer > current_time:
+                if current_time - self.animation_timer > self.animation_delay_fly:
+                    self.image = self.start_fly_animation.image
+                    self.start_fly_animation.update()
+                    if self.image != self.start_fly_animation.frames[3]: # Иначе двойная задержка
+                        self.animation_timer = current_time  # Сбрасываем таймер
+                    self.mirror()
+            elif current_time - self.animation_timer > self.animation_delay:
                 self.image = self.fly_animation.image
                 self.fly_animation.update()
                 self.animation_timer = current_time  # Сбрасываем таймер
                 self.mirror()
-        elif self.is_moving:
-            self.image = self.moving_animation.image
-            self.moving_animation.update()
-            self.mirror()
         else:
-            self.image = self.standing_animation
-            self.mirror()
+            self.extra_animation_timer = self.animation_delay_fly * len(self.start_fly_animation.frames) + current_time
+            self.start_fly_animation.image = self.start_fly_animation.frames[0]
+            if self.is_moving:
+                self.image = self.moving_animation.image
+                self.moving_animation.update()
+                self.mirror()
+            else:
+                self.image = self.standing_animation
+                self.mirror()
 
     def mirror(self):
+        """Функция, отвечающая за отзеркаливание изображения"""
         if not self.orientation:  # Зеркалим изображение взависимости от направления
             self.image = pygame.transform.flip(self.image, True, False)
 
@@ -82,20 +95,25 @@ class Kirby(pygame.sprite.Sprite):
             self.is_moving = True
             self.orientation = True
         elif keys[pygame.K_UP] or keys[pygame.K_w]:
-            self.v = self.jump_speed  # движение вверх
+            v1.y -= 1
             self.is_flying = True
-        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:  # мб анимация подката...
+            self.is_jumping = True
+        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:  # мб анимация АТАКИИ...
             v1.y += 1
             self.is_moving = False
             self.is_standing = False
-        elif keys[pygame.K_SPACE] and self.v == 0:  # Прыжок
-            self.v = self.jump_speed  # движение вверх
         else:
             self.is_moving = False
             self.is_standing = True
             self.is_flying = False
 
+        if self.is_jumping:
+            self.rect.y -= 10
+            self.is_jumping = False
+
+
         self.direction = v1.normalize() if v1.length() > 0 else v1
+        # Вектор надо нормализовывать, чтобы скорость была единичной
         self.rect.x += self.direction.x * self.speed
         self.check_collision('x')
         self.rect.y += self.direction.y * self.speed
