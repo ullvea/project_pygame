@@ -1,6 +1,6 @@
 from classes.base import *
 from classes.kirby import Kirby
-from classes.enemies import WaddleDoo
+from classes.enemies import *
 
 
 class FirstLevel:
@@ -52,3 +52,7 @@ class FirstLevel:
                 self.waddle_doo = WaddleDoo((obj.x * 2, obj.y * 2),
                                             self.all_sprites, self.waddle_doo_sprites, self.obstacle_sprites,
                                             self.kirby)
+            """if obj.name == 'fly':
+                self.fly = Fly((obj.x * 2, obj.y * 2),
+                                                self.all_sprites, self.waddle_doo_sprites, self.obstacle_sprites,
+                                                self.kirby)"""

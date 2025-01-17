@@ -23,12 +23,15 @@
             "scaleInDock": 1
         },
         "map_vegetable_vallue.tmx": {
-            "scale": 1,
-            "selectedLayer": 4,
+            "scale": 32,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 402,
-                "y": 122.5
+                "x": 153.9375,
+                "y": 104.984375
             }
+        },
+        "map_vegetable_vallue.tmx#Fly": {
+            "scaleInDock": 1
         },
         "map_vegetable_vallue.tmx#Kirby_character": {
             "scaleInDock": 1
@@ -51,9 +54,9 @@
     ],
     "project": "vegetable_valley_project.tiled-project",
     "recentFiles": [
+        "map_vegetable_vallue.tmx",
         "Kirby_character.tsx",
-        "Vegetable_Valley_1_Room_A_tiles.tsx",
-        "map_vegetable_vallue.tmx"
+        "Vegetable_Valley_1_Room_A_tiles.tsx"
     ],
     "tileset.embedInMap": true,
     "tileset.lastUsedFormat": "tsx",

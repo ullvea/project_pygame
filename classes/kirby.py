@@ -6,7 +6,8 @@ class Kirby(pygame.sprite.Sprite):
         super().__init__(groups)
         colorkeys = ((84, 110, 140), (86, 113, 145), (86, 113, 146), (98, 130, 179), (107, 142, 196), (108, 143, 194),
                      (109, 144, 199), (110, 146, 199), (111, 147, 201), (113, 151, 206), (114, 152, 209),
-                     (116, 154, 212))
+                     (116, 154, 212), (116, 154, 212), (114, 151, 208), (110, 145, 200), (93, 122, 159), (107, 142, 193),
+                     (92, 121, 158))
 
         self.image = load_image('Kirby_character.png', colorkeys)
 
@@ -17,11 +18,11 @@ class Kirby(pygame.sprite.Sprite):
         self.moving_animation = AnimatedSprite(load_image("moving_animation.png", colorkeys),
                                                4, 1, 76, 16)
         self.start_fly_animation = AnimatedSprite(load_image("Kirby_start_fly1.png", colorkeys),
-                                                  4, 1, 92, 24)
+                                                  4, 1, 89, 24)
         self.fly_animation = AnimatedSprite(load_image("Kirby_fly.png", colorkeys),
                                             2, 1, 52, 24)
         self.end_fly_animation = AnimatedSprite(load_image("Kirby_end_fly.png", colorkeys),
-                                                2, 1, 52, 24)
+                                                4, 1, 92, 24)
 
         self.orientation = True  # Флаг, отвечающий за направление движения
 
@@ -31,22 +32,25 @@ class Kirby(pygame.sprite.Sprite):
         self.is_standing = True
         self.is_flying_ending = False
         self.is_jumping = True
+        self.end_fly = False
 
         self.obstacle_sprites = obstacle_sprites
         self.confines_sprites = confines_sprites
 
         self.direction = pygame.math.Vector2()
         self.speed = 6
+        self.jump_height = 13 # Устанавливаем высоту прыжка
 
-        self.g = 0.25  # чтобы персонаж не мог улетать
+        self.g = 0.5  # чтобы персонаж не мог улетать
         # минус тк у нас компьютерная сис-ма отсчета
         self.v = 0  # скорость по вертикали
 
         # Таймер для анимации
         self.animation_timer = 0
-        self.animation_delay = 750
+        self.animation_delay = 100
         self.animation_delay_fly = 75
         self.extra_animation_timer = self.animation_delay_fly * len(self.start_fly_animation.frames)
+        self.extra_animation_timer2 = self.animation_delay_fly * len(self.end_fly_animation.frames)
 
     def animation(self):
         ''' Функция отвечает за смену анимации при каком-либо роде действий  '''
@@ -56,18 +60,33 @@ class Kirby(pygame.sprite.Sprite):
                 if current_time - self.animation_timer > self.animation_delay_fly:
                     self.image = self.start_fly_animation.image
                     self.start_fly_animation.update()
-                    if self.image != self.start_fly_animation.frames[3]: # Иначе двойная задержка
-                        self.animation_timer = current_time  # Сбрасываем таймер
+                    self.animation_timer = current_time  # Сбрасываем таймер
                     self.mirror()
             elif current_time - self.animation_timer > self.animation_delay:
                 self.image = self.fly_animation.image
                 self.fly_animation.update()
                 self.animation_timer = current_time  # Сбрасываем таймер
                 self.mirror()
+            self.end_fly = True
+            self.end_fly_animation.image = self.end_fly_animation.frames[0]
+
+
         else:
-            self.extra_animation_timer = self.animation_delay_fly * len(self.start_fly_animation.frames) + current_time
             self.start_fly_animation.image = self.start_fly_animation.frames[0]
-            if self.is_moving:
+            self.extra_animation_timer = self.animation_delay_fly * len(
+                self.start_fly_animation.frames) + current_time
+
+            if self.end_fly:
+                if self.extra_animation_timer > current_time:
+                    if current_time - self.animation_timer > self.animation_delay_fly:
+                        self.image = self.end_fly_animation.image
+                        self.end_fly_animation.update()
+                        if self.image == self.end_fly_animation.frames[3]:
+                            self.end_fly = False
+                        self.animation_timer = current_time  # Сбрасываем таймер
+                        self.mirror()
+
+            elif self.is_moving:
                 self.image = self.moving_animation.image
                 self.moving_animation.update()
                 self.mirror()
@@ -95,7 +114,7 @@ class Kirby(pygame.sprite.Sprite):
             self.is_moving = True
             self.orientation = True
         elif keys[pygame.K_UP] or keys[pygame.K_w]:
-            v1.y -= 1
+            self.v -= 1
             self.is_flying = True
             self.is_jumping = True
         elif keys[pygame.K_DOWN] or keys[pygame.K_s]:  # мб анимация АТАКИИ...
@@ -106,10 +125,6 @@ class Kirby(pygame.sprite.Sprite):
             self.is_moving = False
             self.is_standing = True
             self.is_flying = False
-
-        if self.is_jumping:
-            self.rect.y -= 10
-            self.is_jumping = False
 
 
         self.direction = v1.normalize() if v1.length() > 0 else v1
@@ -136,9 +151,9 @@ class Kirby(pygame.sprite.Sprite):
                 elif case == 'y':
                     if self.rect.bottom >= item.rect.top >= self.last_rect.top:
                         self.rect.bottom = item.rect.top
-                        self.v = 0  # сброс скорости тк кирби должна падать вниз
                     elif self.rect.top <= item.rect.bottom <= self.last_rect.bottom:
                         self.rect.top = item.rect.bottom
+                    self.v = 0  # сброс скорости тк кирби должна падать вниз
 
         for item in self.confines_sprites:
             if self.rect.left > item.rect.left:
