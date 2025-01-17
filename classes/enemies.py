@@ -64,7 +64,7 @@ class WaddleDoo(pygame.sprite.Sprite):
     def attack(self):
         distance = math.sqrt((self.rect.centerx - self.player.rect.centerx) ** 2 +
                              (self.rect.centery - self.player.rect.centery) ** 2)
-        if distance <= 220:
+        if distance <= 320:
             pass
 
     def update(self):
@@ -78,3 +78,19 @@ class WaddleDoo(pygame.sprite.Sprite):
             self.animation.update()
             self.animation_timer = current_time
             self.mirror()
+
+class Shot(pygame.sprite.Sprite):
+    def __init__(self, image, distance, player, animation_timer, delay):
+        super().__init__(sprite_shots_group)
+        self.image = image
+        self.distance = distance
+        self.player = player
+        self.animation_timer = animation_timer
+        self.animation_delay = delay
+
+    def attack(self):
+        current_time = pygame.time.get_ticks()
+        if current_time - self.animation_timer > self.animation_delay:
+            self.image = self.animation.image
+            self.animation.update()
+            self.animation_timer = current_time
