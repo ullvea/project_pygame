@@ -27,9 +27,8 @@ def main():
                 running = False
 
         game_map.run()
-
         pygame.display.flip()
-        clock.tick(fps)
+        clock.tick(FPS)
 
     pygame.quit()
 

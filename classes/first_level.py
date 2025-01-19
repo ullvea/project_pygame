@@ -19,7 +19,9 @@ class FirstLevel:
         for sprite in self.all_sprites:
             camera.apply(sprite)
         self.all_sprites.update()
+        sprite_shots_group.update()
         screen.fill((60, 188, 252))
+        sprite_shots_group.draw(self.surface)
         self.all_sprites.draw(self.surface)
 
     def surfx2(self, surf):
@@ -46,6 +48,7 @@ class FirstLevel:
         for obj in tmx_map.get_layer_by_name('main'):
             self.kirby = Kirby((obj.x * 2, obj.y * 2),
                                self.all_sprites, self.obstacle_sprites, self.confines_sprites)
+            kirby_sprites.add(self.kirby)
 
         for obj in tmx_map.get_layer_by_name('enemies'):
             if obj.name == 'waddle_doo':

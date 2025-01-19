@@ -7,7 +7,7 @@ from pytmx import *
 
 size = width, height = 700, 525
 screen = pygame.display.set_mode((width, height))
-fps = 25
+FPS = 25
 TILE_SIZE = 32
 
 
@@ -67,6 +67,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
 obstacles = pygame.sprite.Group()
 animated_sprites = pygame.sprite.Group()
 sprite_shots_group = pygame.sprite.Group()
+kirby_sprites = pygame.sprite.Group()
 camera = Camera()
 
 
