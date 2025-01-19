@@ -27,16 +27,20 @@ class WaddleDoo(pygame.sprite.Sprite):
         self.speed = -3  # Скорость отрицательная, так как у нас компьютерная система отсчёта
         self.v = 0
         self.g = 0.2
-        self.shot = Shot(load_image('waddle_doo_attack.png', self.colorkeys), self)
+        self.shot = None
 
     def attack(self):
         current_time = pygame.time.get_ticks()
         distance = math.sqrt((self.rect.centerx - self.player.rect.centerx) ** 2 +
                              (self.rect.centery - self.player.rect.centery) ** 2)
-        if distance <= 320 and self.rect.x > self.player.rect.x: # Cоздание атаки
-            for i in range(5):
-                if current_time - self.animation_timer_for_shots > 250:
-                    self.shot = Shot(load_image('waddle_doo_attack.png', self.colorkeys), self)
+
+        if distance <= 520 and self.rect.x > self.player.rect.x: # Cоздание атаки
+            if current_time - self.animation_timer_for_shots > 600:
+                for i in range(3, 0, -1):
+                    x = self.rect.x - i * 17
+                    y = self.rect.y - i * 17
+                    speed = [self.speed, self.speed]
+                    self.shot = Shot(load_image('waddle_doo_attack.png', self.colorkeys), x, y, speed)
                     self.animation_timer_for_shots = current_time
 
         for item in sprite_shots_group:  # Выстрелы должны удалятся при столкновении с Кирби
@@ -89,13 +93,17 @@ class WaddleDoo(pygame.sprite.Sprite):
 
 
 class Shot(pygame.sprite.Sprite):
-    def __init__(self, image, enemy):
+    def __init__(self, image, x, y, speed):
         super().__init__(all_sprites, sprite_shots_group)
         self.image = image
-        self.rect = self.image.get_rect(topleft=(enemy.rect.x, enemy.rect.y))
+        self.speed_x = speed[0]
+        self.speed_y = speed[1]
+        self.rect = self.image.get_rect(topleft=(x, y))
         self.current_time = pygame.time.get_ticks()
 
     def update(self):
-        if pygame.time.get_ticks() - self.current_time > 100: # Выстрел должен пропасть через определенное кол-во времени
+        self.rect.x += self.speed_x
+        self.rect.y += self.speed_y
+        if pygame.time.get_ticks() - self.current_time > 300: # Выстрел должен пропасть через определенное кол-во времени
             print('Kill by himself')
             self.kill()
