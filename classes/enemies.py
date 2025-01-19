@@ -34,12 +34,12 @@ class WaddleDoo(pygame.sprite.Sprite):
         distance = math.sqrt((self.rect.centerx - self.player.rect.centerx) ** 2 +
                              (self.rect.centery - self.player.rect.centery) ** 2)
 
-        if distance <= 520 and self.rect.x > self.player.rect.x: # Cоздание атаки
-            if current_time - self.animation_timer_for_shots > 600:
-                for i in range(3, 0, -1):
-                    x = self.rect.x - i * 17
-                    y = self.rect.y - i * 17
-                    speed = [self.speed, self.speed]
+        if distance <= 520 and self.rect.x > self.player.rect.x:  # Cоздание атаки
+            if current_time - self.animation_timer_for_shots > 800:
+                for i in range(4, 1, -1):
+                    x = self.rect.x - (i-1) * 17
+                    y = self.rect.y - (i-1) * 17
+                    speed = [self.speed, self.speed - 2 * i ]
                     self.shot = Shot(load_image('waddle_doo_attack.png', self.colorkeys), x, y, speed)
                     self.animation_timer_for_shots = current_time
 
@@ -76,7 +76,7 @@ class WaddleDoo(pygame.sprite.Sprite):
 
     def mirror(self):
         """Функция, отвечающая за отзеркаливание изображения"""
-        if not self.orientation:  # Зеркалим изображение взависимости о
+        if not self.orientation:  # Зеркалим изображение
             self.image = pygame.transform.flip(self.image, True, False)
 
     def update(self):
@@ -100,10 +100,18 @@ class Shot(pygame.sprite.Sprite):
         self.speed_y = speed[1]
         self.rect = self.image.get_rect(topleft=(x, y))
         self.current_time = pygame.time.get_ticks()
+        self.start_moving = True # Флаг, отвечающий за то, чтобы вначале выстрелы пролетали вперед, а затем начинали падать
 
     def update(self):
-        self.rect.x += self.speed_x
-        self.rect.y += self.speed_y
-        if pygame.time.get_ticks() - self.current_time > 300: # Выстрел должен пропасть через определенное кол-во времени
-            print('Kill by himself')
+        now = pygame.time.get_ticks()
+        if now - self.current_time < 600 and self.start_moving:  # Выстрел должен пропасть через определенное кол-во времени
+            self.rect.x += self.speed_x
+            self.rect.y += self.speed_y
+            self.current_time = now
+            self.start_moving = False
+        elif now - self.current_time < 400:
+            self.rect.x += self.speed_x
+            self.rect.y -= self.speed_y
+        else:
+            print("Oops")
             self.kill()
