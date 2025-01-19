@@ -5,11 +5,11 @@ import math
 class WaddleDoo(pygame.sprite.Sprite):
     def __init__(self, pos, groups, waddle_doo_sprites, obstacle_sprites, player):
         super().__init__(groups)
-        colorkeys = [(98, 130, 179), (116, 154, 212), (111, 147, 201), (84, 110, 140)]
-        self.image = load_image('waddle_doo.png', colorkeys)
-        self.attack_image = load_image('waddle_doo_attack.png', colorkeys)
-        self.animation = AnimatedSprite(load_image('waddle_doo.png', colorkeys), 2, 1, 36, 16)
-        self.animation_is_attacked = AnimatedSprite(load_image('waddle_doo.png', colorkeys),
+        self.colorkeys = [(98, 130, 179), (116, 154, 212), (111, 147, 201), (84, 110, 140)]
+        self.image = load_image('waddle_doo.png', self.colorkeys)
+        self.attack_image = load_image('waddle_doo_attack.png', self.colorkeys)
+        self.animation = AnimatedSprite(load_image('waddle_doo.png', self.colorkeys), 2, 1, 36, 16)
+        self.animation_is_attacked = AnimatedSprite(load_image('waddle_doo.png', self.colorkeys),
                                                     2, 1, 36, 16)
         self.rect = self.image.get_rect(topleft=pos)
         self.last_rect = self.rect.copy()
@@ -22,20 +22,26 @@ class WaddleDoo(pygame.sprite.Sprite):
 
         # Таймер для анимации
         self.animation_timer = 0
+        self.animation_timer_for_shots = 0
         self.animation_delay = 100
         self.speed = -3 # Скорость отрицательная, так как у нас компьютерная система отсчёта
         self.v = 0
         self.g = 0.2
-
-        self.shot = Shot(load_image('waddle_doo_attack.png', colorkeys), self)
+        self.shot = Shot(load_image('waddle_doo_attack.png', self.colorkeys), self)
 
     def attack(self):
+        current_time = pygame.time.get_ticks()
         distance = math.sqrt((self.rect.centerx - self.player.rect.centerx) ** 2 +
                              (self.rect.centery - self.player.rect.centery) ** 2)
         if distance <= 320 and self.rect.x > self.player.rect.x:
-            if pygame.sprite.spritecollideany(self.shot, kirby_sprites):
-                self.shot.kill()
-
+            for i in range(5):
+                if current_time - self.animation_timer_for_shots > 500:
+                    self.shot = Shot(load_image('waddle_doo_attack.png', self.colorkeys), self)
+                    self.animation_timer_for_shots = current_time
+        for item in sprite_shots_group: # Выстрелы должны удалятся при столкновении с Кирби
+            if pygame.sprite.spritecollideany(item, kirby_sprites):
+                item.kill()
+                print('Kill!')
 
 
     def move(self):
@@ -84,6 +90,6 @@ class WaddleDoo(pygame.sprite.Sprite):
 
 class Shot(pygame.sprite.Sprite):
     def __init__(self, image, enemy):
-        super().__init__(sprite_shots_group, all_sprites)
+        super().__init__(all_sprites, sprite_shots_group)
         self.image = image
         self.rect = self.image.get_rect(topleft=(enemy.rect.x, enemy.rect.y))
