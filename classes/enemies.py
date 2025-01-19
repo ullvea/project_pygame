@@ -27,8 +27,7 @@ class WaddleDoo(pygame.sprite.Sprite):
         self.v = 0
         self.g = 0.2
 
-        # self.shot = Shot(load_image('waddle_doo_attack.png', colorkeys), self)
-        self.shot = Shot(load_image('waddle_doo.png', colorkeys), self)
+        self.shot = Shot(load_image('waddle_doo_attack.png', colorkeys), self)
 
     def attack(self):
         distance = math.sqrt((self.rect.centerx - self.player.rect.centerx) ** 2 +
@@ -85,6 +84,6 @@ class WaddleDoo(pygame.sprite.Sprite):
 
 class Shot(pygame.sprite.Sprite):
     def __init__(self, image, enemy):
-        super().__init__(sprite_shots_group, )
+        super().__init__(sprite_shots_group, all_sprites)
         self.image = image
         self.rect = self.image.get_rect(topleft=(enemy.rect.x, enemy.rect.y))

@@ -68,6 +68,7 @@ obstacles = pygame.sprite.Group()
 animated_sprites = pygame.sprite.Group()
 sprite_shots_group = pygame.sprite.Group()
 kirby_sprites = pygame.sprite.Group()
+all_sprites = pygame.sprite.Group()
 camera = Camera()
 
 
