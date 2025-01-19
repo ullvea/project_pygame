@@ -34,19 +34,23 @@ class WaddleDoo(pygame.sprite.Sprite):
         distance = math.sqrt((self.rect.centerx - self.player.rect.centerx) ** 2 +
                              (self.rect.centery - self.player.rect.centery) ** 2)
 
-        if distance <= 520 and self.rect.x > self.player.rect.x:  # Cоздание атаки
-            if current_time - self.animation_timer_for_shots > 800:
+        if distance <= 520 and ((self.rect.x > self.player.rect.x and self.orientation) or
+        (self.rect.x < self.player.rect.x and not self.orientation)):  # Cоздание атаки
+            if current_time - self.animation_timer_for_shots > 2000:
                 for i in range(4, 1, -1):
-                    x = self.rect.x - (i-1) * 17
-                    y = self.rect.y - (i-1) * 17
-                    speed = [self.speed, self.speed - 2 * i ]
-                    self.shot = Shot(load_image('waddle_doo_attack.png', self.colorkeys), x, y, speed)
+                    if self.orientation:
+                        x = self.rect.x - (i - 1) * 18
+                    else:
+                        x = self.rect.x + (i - 1) * 18
+                    y = self.rect.y - (i - 1) * 17
+                    speed = [self.speed, self.speed - 2 * i]
+                    self.shot = Shot(load_image('waddle_doo_attack.png', self.colorkeys), x, y, speed,
+                                     self.orientation)
                     self.animation_timer_for_shots = current_time
 
         for item in sprite_shots_group:  # Выстрелы должны удалятся при столкновении с Кирби
             if pygame.sprite.spritecollideany(item, kirby_sprites):
                 item.kill()
-                print('Kill!')
 
     def move(self):
         self.rect.x += self.speed
@@ -93,9 +97,10 @@ class WaddleDoo(pygame.sprite.Sprite):
 
 
 class Shot(pygame.sprite.Sprite):
-    def __init__(self, image, x, y, speed):
+    def __init__(self, image, x, y, speed, orientation):
         super().__init__(all_sprites, sprite_shots_group)
         self.image = image
+        self.orientation = orientation
         self.speed_x = speed[0]
         self.speed_y = speed[1]
         self.rect = self.image.get_rect(topleft=(x, y))
@@ -111,7 +116,9 @@ class Shot(pygame.sprite.Sprite):
             self.start_moving = False
         elif now - self.current_time < 400:
             self.rect.x += self.speed_x
-            self.rect.y -= self.speed_y
+            if not self.orientation:
+                self.rect.y -= self.speed_y - self.speed_x * 2
+            else:
+                self.rect.y -= self.speed_y
         else:
-            print("Oops")
             self.kill()
