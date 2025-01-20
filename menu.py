@@ -18,7 +18,7 @@ class Button:
 
         # Отрисовка текста
         font = pygame.font.SysFont('Arial', 30)
-        text_surface = font.render(self.text, True, WHITE)
+        text_surface = font.render(self.text, True, pygame.Color('white'))
         text_rect = text_surface.get_rect(center=self.rect.center)
         surface.blit(text_surface, text_rect)
 
