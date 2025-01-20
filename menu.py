@@ -16,6 +16,7 @@ def main_menu():
 
         pygame.display.flip()
     pygame.quit()
+# git reset --hard a3775a5485af0af20375cedf46112db5f813322a
 
 
 main_menu()
