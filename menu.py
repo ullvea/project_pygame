@@ -1,10 +1,6 @@
 from classes.base import *
 
 
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-
 # Класс кнопки
 class Button:
     def __init__(self, x, y, width, height, text):
