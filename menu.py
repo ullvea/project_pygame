@@ -2,7 +2,8 @@ from classes.base import *
 
 
 pygame.display.set_caption("Menu")
-back_ground = pygame.image.load("data/menu_white_and_purple.jpg")
+back_ground = load_image("menu_white_and_purple.jpg")
+back_ground = pygame.transform.scale(back_ground, (700, 525))
 screen.fill((255, 255, 255))
 
 
