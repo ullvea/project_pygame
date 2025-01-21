@@ -16,7 +16,7 @@ class Button:
         else:
             pygame.draw.rect(surface, self.color, self.rect)
 
-        # заменить шрифт
+        # заменить шрифтv
         font = pygame.font.SysFont('Arial', 30)
         text_surface = font.render(self.text, True, pygame.Color('white'))
         text_rect = text_surface.get_rect(center=self.rect.center)
@@ -42,7 +42,7 @@ def main_menu():
     screen.fill((255, 255, 255))
     running = True
 
-    play_button = Button(50, 350, 100, 50, "PLAY")
+    play_button = Button(50, 60, 100, 50, "PLAY")
 
     image = load_image("yellow_cursor2.png")
 
@@ -59,7 +59,6 @@ def main_menu():
                 # изображение курсора
                 screen.blit(image, (x, y))
 
-            # # отрисовка кнопки
             # play_button.draw(screen)
             pygame.mouse.set_visible(False)
 
