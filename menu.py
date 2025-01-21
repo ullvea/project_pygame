@@ -42,25 +42,31 @@ def main_menu():
     screen.fill((255, 255, 255))
     running = True
 
-    # Создание экземпляра кнопки
     play_button = Button(50, 350, 100, 50, "PLAY")
 
+    image = load_image("yellow_cursor2.png")
+
     while running:
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            screen.blit(back_ground, (0, 0))
+            # отрисовка кнопки
+            play_button.draw(screen)
+            if pygame.mouse.get_focused():
+                x, y = pygame.mouse.get_pos()
+                # изображение курсора
+                screen.blit(image, (x, y))
+
+            # # отрисовка кнопки
+            # play_button.draw(screen)
+            pygame.mouse.set_visible(False)
 
             play_button.event(event)
 
-        screen.blit(back_ground, (0, 0))
-
-        # отрисовка кнопки
-        play_button.draw(screen)
-
-
         pygame.display.flip()
     pygame.quit()
-# git reset --hard a3775a5485af0af20375cedf46112db5f813322a
 
 
 main_menu()
