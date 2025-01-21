@@ -16,7 +16,7 @@ class Button:
         else:
             pygame.draw.rect(surface, self.color, self.rect)
 
-        # Отрисовка текста
+        # заменить шрифт
         font = pygame.font.SysFont('Arial', 30)
         text_surface = font.render(self.text, True, pygame.Color('white'))
         text_rect = text_surface.get_rect(center=self.rect.center)
@@ -36,7 +36,7 @@ class Button:
 def main_menu():
     pygame.init()
     pygame.display.set_caption("Menu")
-    back_ground = load_image("menu_white_and_purple.jpg")
+    back_ground = load_image("pink_wallpaper.jpg")
     # изменяем размер картинки
     back_ground = pygame.transform.scale(back_ground, (700, 525))
     screen.fill((255, 255, 255))
