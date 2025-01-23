@@ -167,8 +167,6 @@ class Kirby(pygame.sprite.Sprite):
     def check_collision(self, case):
         for item in self.obstacle_sprites:
             if item.rect.colliderect(self.rect):
-                if self.v >= 0:
-                    self.is_jumping = True
                 if case == 'x':
                     if self.rect.right >= item.rect.left >= self.last_rect.left:
                         self.rect.right = item.rect.left
@@ -178,6 +176,7 @@ class Kirby(pygame.sprite.Sprite):
                 elif case == 'y':
                     if self.rect.bottom >= item.rect.top >= self.last_rect.top:
                         self.rect.bottom = item.rect.top
+                        self.is_jumping = True
                     elif self.rect.top <= item.rect.bottom <= self.last_rect.bottom:
                         self.rect.top = item.rect.bottom
                     self.v = 0  # сброс скорости тк кирби должна падать вниз
