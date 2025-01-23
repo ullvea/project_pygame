@@ -16,8 +16,8 @@ class Button:
         else:
             pygame.draw.rect(surface, self.color, self.rect)
 
-        # заменить шрифтv
-        font = pygame.font.SysFont('Arial', 30)
+        # заменить шрифт: comicsansms
+        font = pygame.font.Font('1stenterprises3D.ttf', 30)
         text_surface = font.render(self.text, True, pygame.Color('white'))
         text_rect = text_surface.get_rect(center=self.rect.center)
         surface.blit(text_surface, text_rect)
@@ -35,6 +35,7 @@ class Button:
 
 def main_menu():
     pygame.init()
+    # print(pygame.font.get_fonts())
     pygame.display.set_caption("Menu")
     back_ground = load_image("pink_wallpaper.jpg")
     # изменяем размер картинки
