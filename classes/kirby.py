@@ -24,6 +24,8 @@ class Kirby(pygame.sprite.Sprite):
                                             2, 1, 52, 24)
         self.end_fly_animation = AnimatedSprite(load_image("Kirby_end_fly.png", colorkeys),
                                                 4, 1, 92, 24)
+        self.eating_animation = AnimatedSprite(load_image("Kirby_start_eating.png", colorkeys),
+                                                2, 1, 36, 24)
 
         self.orientation = True  # Флаг, отвечающий за направление движения
 
@@ -35,6 +37,7 @@ class Kirby(pygame.sprite.Sprite):
         self.is_jumping = True
         self.end_fly = False
         self.is_starting_jumping_animation = False
+        self.is_attacking = False
 
         self.obstacle_sprites = obstacle_sprites
         self.confines_sprites = confines_sprites
@@ -51,6 +54,7 @@ class Kirby(pygame.sprite.Sprite):
 
         # Таймеры для анимации
         self.animation_timer = 0
+        self.animation_timer_eating = 500
         self.animation_delay = 100
         self.animation_delay_fly = 75
         self.extra_animation_timer = self.animation_delay_fly * len(self.start_fly_animation.frames)
@@ -59,6 +63,9 @@ class Kirby(pygame.sprite.Sprite):
     def animation(self):
         ''' Функция отвечает за смену анимации при каком-либо роде действий  '''
         current_time = pygame.time.get_ticks()
+        if not self.is_attacking:
+            self.animation_timer_eating = current_time + 500
+
         if self.is_flying and not self.is_jumping:
             if self.extra_animation_timer > current_time:
                 if current_time - self.animation_timer > self.animation_delay_fly:
@@ -92,6 +99,12 @@ class Kirby(pygame.sprite.Sprite):
             elif self.is_starting_jumping_animation:
                 self.image = self.jump_image
                 self.mirror()
+            elif self.is_attacking:
+                if self.animation_timer_eating > current_time:
+                    self.image = self.eating_animation.frames[0]
+                else:
+                    self.image = self.eating_animation.frames[1]
+                self.mirror()
             elif self.is_moving:
                 self.image = self.moving_animation.image
                 self.moving_animation.update()
@@ -108,7 +121,6 @@ class Kirby(pygame.sprite.Sprite):
     def move(self):
         keys = pygame.key.get_pressed()
         v1 = pygame.math.Vector2(0, 0)
-
         self.is_standing = False
         current_time = pygame.time.get_ticks()
 
@@ -117,12 +129,15 @@ class Kirby(pygame.sprite.Sprite):
             self.is_moving = True
             self.orientation = False
             self.is_starting_jumping_animation = False
+            self.is_attacking = False
         elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             v1.x += 1
             self.is_moving = True
             self.orientation = True
             self.is_starting_jumping_animation = False
         elif keys[pygame.K_UP] or keys[pygame.K_w]:
+            self.is_attacking = False
+            self.is_attacking = False
             if self.is_jumping:
                 self.rect.y += self.jump_height
                 if self.orientation:
@@ -138,7 +153,7 @@ class Kirby(pygame.sprite.Sprite):
                 self.v -= 1
                 self.is_flying = True
         elif keys[pygame.K_DOWN] or keys[pygame.K_s]:  # мб анимация АТАКИИ...
-            v1.y += 1
+            self.is_attacking = True
             self.is_moving = False
             self.is_standing = False
         else:
@@ -146,6 +161,7 @@ class Kirby(pygame.sprite.Sprite):
             self.is_standing = True
             self.is_flying = False
             self.is_starting_jumping_animation = False
+            self.is_attacking = False
 
 
         self.direction = v1.normalize() if v1.length() > 0 else v1
