@@ -46,19 +46,28 @@ def main_menu():
     play_button = Button(50, 60, 100, 50, "PLAY")
 
     image = load_image("yellow_cursor2.png")
+    title = load_image("kirbi.webp")
+    title = pygame.transform.scale(title, (300, 200))
 
     while running:
 
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 running = False
+
+            # отрисовка заднего фона
             screen.blit(back_ground, (0, 0))
             # отрисовка кнопки
             play_button.draw(screen)
+            # отрисовка названия
+            screen.blit(title, (200, 150))
+
             if pygame.mouse.get_focused():
                 x, y = pygame.mouse.get_pos()
                 # изображение курсора
                 screen.blit(image, (x, y))
+
 
             # play_button.draw(screen)
             pygame.mouse.set_visible(False)
