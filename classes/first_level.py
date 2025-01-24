@@ -8,7 +8,7 @@ class FirstLevel:
 
     def __init__(self, tmx_map):
         self.surface = pygame.display.get_surface()
-        all_sprites = pygame.sprite.Group()
+        self.can_jump_sprites = pygame.sprite.Group()
         self.obstacle_sprites = pygame.sprite.Group()  # группа спрайтов, отвечающая за поверхность (препятствия)
         self.confines_sprites = pygame.sprite.Group()  # группа спрайтов, отвечающая за ограничение камеры
         self.waddle_doo_sprites = pygame.sprite.Group()
@@ -39,13 +39,16 @@ class FirstLevel:
         for x, y, surf in tmx_map.get_layer_by_name('beautiful_background').tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf), all_sprites)
 
+        for x, y, surf in tmx_map.get_layer_by_name('can_jump').tiles():
+            Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf), (all_sprites, self.can_jump_sprites))
+
         for x, y, surf in tmx_map.get_layer_by_name('stop_camera').tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf),
                    (all_sprites, self.confines_sprites))
 
         for obj in tmx_map.get_layer_by_name('main'):
             self.kirby = Kirby((obj.x * 2, obj.y * 2),
-                               all_sprites, self.obstacle_sprites, self.confines_sprites)
+                               all_sprites, self.obstacle_sprites, self.confines_sprites, self.can_jump_sprites)
             kirby_sprites.add(self.kirby)
 
         for obj in tmx_map.get_layer_by_name('enemies'):

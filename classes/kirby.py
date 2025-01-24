@@ -2,7 +2,7 @@ from classes.base import *
 
 
 class Kirby(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, obstacle_sprites, confines_sprites):
+    def __init__(self, pos, groups, obstacle_sprites, confines_sprites, can_jump_sprites):
         super().__init__(groups)
         colorkeys = ((84, 110, 140), (86, 113, 145), (86, 113, 146), (98, 130, 179), (107, 142, 196), (108, 143, 194),
                      (109, 144, 199), (110, 146, 199), (111, 147, 201), (113, 151, 206), (114, 152, 209),
@@ -38,6 +38,7 @@ class Kirby(pygame.sprite.Sprite):
 
         self.obstacle_sprites = obstacle_sprites
         self.confines_sprites = confines_sprites
+        self.can_jump_sprites = can_jump_sprites
 
         self.direction = pygame.math.Vector2()
         self.speed = 6
@@ -107,12 +108,9 @@ class Kirby(pygame.sprite.Sprite):
     def move(self):
         keys = pygame.key.get_pressed()
         v1 = pygame.math.Vector2(0, 0)
-        print(self.v)
 
         self.is_standing = False
         current_time = pygame.time.get_ticks()
-        if not self.is_jumping:
-            self.jump_time = current_time + 1000
 
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             v1.x -= 1
@@ -136,7 +134,6 @@ class Kirby(pygame.sprite.Sprite):
                     self.is_jumping = False
                     self.jump_time = current_time + 1000
                     self.v = 0
-                    print('Jump!')
             else:
                 self.v -= 1
                 self.is_flying = True
@@ -176,10 +173,12 @@ class Kirby(pygame.sprite.Sprite):
                 elif case == 'y':
                     if self.rect.bottom >= item.rect.top >= self.last_rect.top:
                         self.rect.bottom = item.rect.top
-                        self.is_jumping = True
                     elif self.rect.top <= item.rect.bottom <= self.last_rect.bottom:
                         self.rect.top = item.rect.bottom
                     self.v = 0  # сброс скорости тк кирби должна падать вниз
+
+        if pygame.sprite.spritecollideany(self, self.can_jump_sprites):
+            self.is_jumping = True
 
         for item in self.confines_sprites:
             if self.rect.left > item.rect.left:
