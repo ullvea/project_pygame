@@ -22,9 +22,9 @@ class WaddleDoo(pygame.sprite.Sprite):
 
         # Таймер для анимации
         self.animation_timer = 0
-        self.animation_timer2 = 0
 
         self.animation_timer_for_shots = 0
+        self.extra_animation_timer = 600
         self.animation_delay = 100
         self.speed = -3  # Скорость отрицательная, так как у нас компьютерная система отсчёта
         self.v = 0
@@ -57,35 +57,32 @@ class WaddleDoo(pygame.sprite.Sprite):
                 item.kill()
 
     def move(self):
-        if not self.attacking:
-            self.rect.x += self.speed
-            if self.orientation:
-                self.rect.y += self.speed
-            else:
-                self.rect.y -= self.speed
+        self.rect.x += self.speed
+        self.check_collisions('x')
 
         collided_sprite = pygame.sprite.spritecollideany(self, self.waddle_doo_sprites)
         if collided_sprite:
             self.orientation = not self.orientation
             self.speed *= -1
 
+        if self.orientation:
+            self.rect.y += self.speed
+        else:
+            self.rect.y -= self.speed
+        # Гравитация
         self.v += self.g
         self.rect.y += self.v
+        self.check_collisions('y')
 
-        # for item in self.obstacle_sprites:
-        #     if item.rect.colliderect(self.rect):
-        #         self.rect.y -= 32
-
-        # Гравитация
-
+    def check_collisions(self, case):
         for item in self.obstacle_sprites:
             if item.rect.colliderect(self.rect):
-                self.rect.y -= 16
-                if self.rect.bottom >= item.rect.top >= self.last_rect.top:
-                    self.rect.bottom = item.rect.top
-                elif self.rect.top <= item.rect.bottom <= self.last_rect.bottom:
-                    self.rect.top = item.rect.bottom
-                self.v = 0
+                if case == 'y':
+                    if self.rect.bottom >= item.rect.top >= self.last_rect.top:
+                        self.rect.bottom = item.rect.top
+                    elif self.rect.top <= item.rect.bottom <= self.last_rect.bottom:
+                        self.rect.top = item.rect.bottom
+                    self.v = 0
 
     def mirror(self):
         """Функция, отвечающая за отзеркаливание изображения"""
@@ -102,10 +99,12 @@ class WaddleDoo(pygame.sprite.Sprite):
             if not self.attacking:
                 self.image = self.animation.image
                 self.animation.update()
+                self.extra_animation_timer = current_time + 600
             else:
-                if current_time - self.animation_timer2 > self.animation_delay:
-                    self.image = self.animation_is_attacking.image
-                    self.animation_is_attacking.update()
+                if self.extra_animation_timer > current_time:
+                    if current_time - self.animation_timer > self.animation_delay:
+                        self.image = self.animation_is_attacking.image
+                        self.animation_is_attacking.update()
                 else:
                     self.attacking = False
             self.animation_timer = current_time
