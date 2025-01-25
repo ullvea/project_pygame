@@ -1,3 +1,5 @@
+import pygame.transform
+
 from classes.base import *
 import math
 
@@ -15,17 +17,18 @@ class WaddleDoo(pygame.sprite.Sprite):
         self.last_rect = self.rect.copy()
         self.waddle_doo_sprites = waddle_doo_sprites
         self.obstacle_sprites = obstacle_sprites
+        self.player = player
 
         self.attacking = False
-        self.player = player
         self.orientation = True
+        self.is_eaten = False
 
         # Таймер для анимации
         self.animation_timer = 0
-
         self.animation_timer_for_shots = 0
         self.extra_animation_timer = 600
         self.animation_delay = 100
+
         self.speed = -3  # Скорость отрицательная, так как у нас компьютерная система отсчёта
         self.v = 0
         self.g = 0.2
@@ -57,6 +60,16 @@ class WaddleDoo(pygame.sprite.Sprite):
                 item.kill()
 
     def move(self):
+        keys = pygame.key.get_pressed()
+        distance = math.sqrt((self.rect.centerx - self.player.rect.centerx) ** 2 +
+                             (self.rect.centery - self.player.rect.centery) ** 2)
+
+        if ((keys[pygame.K_DOWN] or keys[pygame.K_s]) and distance <= 50 and
+                ((self.rect.x > self.player.rect.x and self.orientation) or
+                                                         (self.rect.x < self.player.rect.x and not self.orientation))):
+            self.is_eaten = True
+            return
+
         self.rect.x += self.speed
         self.check_collisions('x')
 
@@ -94,21 +107,25 @@ class WaddleDoo(pygame.sprite.Sprite):
         self.attack()
         current_time = pygame.time.get_ticks()
         self.last_rect = self.rect.copy()
-
-        if current_time - self.animation_timer > self.animation_delay:
-            if not self.attacking:
-                self.image = self.animation.image
-                self.animation.update()
-                self.extra_animation_timer = current_time + 600
-            else:
-                if self.extra_animation_timer > current_time:
-                    if current_time - self.animation_timer > self.animation_delay:
-                        self.image = self.animation_is_attacking.image
-                        self.animation_is_attacking.update()
+        if self.is_eaten:
+            new_width = int(self.image.get_width() * 0.9)
+            new_height = int(self.image.get_height() * 0.9)
+            self.image = pygame.transform.smoothscale(self.image, (new_width, new_height))
+        else:
+            if current_time - self.animation_timer > self.animation_delay:
+                if not self.attacking:
+                    self.image = self.animation.image
+                    self.animation.update()
+                    self.extra_animation_timer = current_time + 600
                 else:
-                    self.attacking = False
-            self.animation_timer = current_time
-            self.mirror()
+                    if self.extra_animation_timer > current_time:
+                        if current_time - self.animation_timer > self.animation_delay:
+                            self.image = self.animation_is_attacking.image
+                            self.animation_is_attacking.update()
+                    else:
+                        self.attacking = False
+                self.animation_timer = current_time
+                self.mirror()
 
 
 
