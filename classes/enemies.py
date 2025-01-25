@@ -65,14 +65,13 @@ class WaddleDoo(pygame.sprite.Sprite):
                              (self.rect.centery - self.player.rect.centery) ** 2)
 
         if ((keys[pygame.K_DOWN] or keys[pygame.K_s]) and distance <= 50 and
-                ((self.rect.x > self.player.rect.x and self.orientation) or
-                                                         (self.rect.x < self.player.rect.x and not self.orientation))):
+                ((self.rect.x > self.player.rect.x and self.orientation == self.player.orientation) or
+                                                         (self.rect.x < self.player.rect.x and not self.orientation == self.player.orientation))):
             self.is_eaten = True
             return
 
         self.rect.x += self.speed
         self.check_collisions('x')
-
         collided_sprite = pygame.sprite.spritecollideany(self, self.waddle_doo_sprites)
         if collided_sprite:
             self.orientation = not self.orientation
@@ -108,9 +107,19 @@ class WaddleDoo(pygame.sprite.Sprite):
         current_time = pygame.time.get_ticks()
         self.last_rect = self.rect.copy()
         if self.is_eaten:
+            # НАДО ПОПРАВИТЬ
+            v_wd = pygame.math.Vector2(self.rect.center)
+            v_kirby = pygame.math.Vector2(self.player.rect.center)
+            s = v_kirby - v_wd
+            direction = s.normalize()
+            self.rect.x += direction.x * self.speed
+            self.rect.y += direction.y * self.speed
+            print(self.rect.x, self.rect.y)
+
             new_width = int(self.image.get_width() * 0.9)
             new_height = int(self.image.get_height() * 0.9)
             self.image = pygame.transform.smoothscale(self.image, (new_width, new_height))
+
         else:
             if current_time - self.animation_timer > self.animation_delay:
                 if not self.attacking:
