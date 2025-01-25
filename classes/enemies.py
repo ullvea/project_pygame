@@ -9,7 +9,7 @@ class WaddleDoo(pygame.sprite.Sprite):
         self.image = load_image('waddle_doo.png', self.colorkeys)
         self.attack_image = load_image('waddle_doo_attack.png', self.colorkeys)
         self.animation = AnimatedSprite(load_image('waddle_doo.png', self.colorkeys), 2, 1, 36, 16)
-        self.animation_is_attacked = AnimatedSprite(load_image('waddle_doo.png', self.colorkeys),
+        self.animation_is_attacking = AnimatedSprite(load_image('waddle_doo_is_attacked.png', self.colorkeys),
                                                     2, 1, 36, 16)
         self.rect = self.image.get_rect(topleft=pos)
         self.last_rect = self.rect.copy()
@@ -22,6 +22,8 @@ class WaddleDoo(pygame.sprite.Sprite):
 
         # Таймер для анимации
         self.animation_timer = 0
+        self.animation_timer2 = 0
+
         self.animation_timer_for_shots = 0
         self.animation_delay = 100
         self.speed = -3  # Скорость отрицательная, так как у нас компьютерная система отсчёта
@@ -34,9 +36,10 @@ class WaddleDoo(pygame.sprite.Sprite):
         distance = math.sqrt((self.rect.centerx - self.player.rect.centerx) ** 2 +
                              (self.rect.centery - self.player.rect.centery) ** 2)
 
-        if distance <= 520 and ((self.rect.x > self.player.rect.x and self.orientation) or
+        if distance <= 220 and ((self.rect.x > self.player.rect.x and self.orientation) or
         (self.rect.x < self.player.rect.x and not self.orientation)):  # Cоздание атаки
             if current_time - self.animation_timer_for_shots > 2000:
+                self.attacking = True
                 for i in range(4, 1, -1):
                     if self.orientation:
                         x = self.rect.x - (i - 1) * 18
@@ -48,30 +51,36 @@ class WaddleDoo(pygame.sprite.Sprite):
                                      self.orientation)
                     self.animation_timer_for_shots = current_time
 
+
         for item in sprite_shots_group:  # Выстрелы должны удалятся при столкновении с Кирби
             if pygame.sprite.spritecollideany(item, kirby_sprites):
                 item.kill()
 
     def move(self):
-        self.rect.x += self.speed
+        if not self.attacking:
+            self.rect.x += self.speed
+            if self.orientation:
+                self.rect.y += self.speed
+            else:
+                self.rect.y -= self.speed
+
         collided_sprite = pygame.sprite.spritecollideany(self, self.waddle_doo_sprites)
         if collided_sprite:
             self.orientation = not self.orientation
             self.speed *= -1
 
-        for item in self.obstacle_sprites:
-            if item.rect.colliderect(self.rect):
-                self.rect.y -= 32
-        if self.orientation:
-            self.rect.y += self.speed
-        else:
-            self.rect.y -= self.speed
-        # Гравитация
         self.v += self.g
         self.rect.y += self.v
 
+        # for item in self.obstacle_sprites:
+        #     if item.rect.colliderect(self.rect):
+        #         self.rect.y -= 32
+
+        # Гравитация
+
         for item in self.obstacle_sprites:
             if item.rect.colliderect(self.rect):
+                self.rect.y -= 16
                 if self.rect.bottom >= item.rect.top >= self.last_rect.top:
                     self.rect.bottom = item.rect.top
                 elif self.rect.top <= item.rect.bottom <= self.last_rect.bottom:
@@ -90,10 +99,18 @@ class WaddleDoo(pygame.sprite.Sprite):
         self.last_rect = self.rect.copy()
 
         if current_time - self.animation_timer > self.animation_delay:
-            self.image = self.animation.image
-            self.animation.update()
+            if not self.attacking:
+                self.image = self.animation.image
+                self.animation.update()
+            else:
+                if current_time - self.animation_timer2 > self.animation_delay:
+                    self.image = self.animation_is_attacking.image
+                    self.animation_is_attacking.update()
+                else:
+                    self.attacking = False
             self.animation_timer = current_time
             self.mirror()
+
 
 
 class Shot(pygame.sprite.Sprite):
