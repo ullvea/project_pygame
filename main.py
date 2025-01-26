@@ -1,3 +1,5 @@
+import sys
+
 import pygame.mixer
 
 from classes.base import *
@@ -74,12 +76,32 @@ class Button:
             # Проверка на наведение курсора
             self.hovered = self.rect.collidepoint(event.pos)
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+class PlayButton(Button):
+    def __init__(self, x, y, width, height, text):
+        super().__init__(x, y, width, height, text)
+
+    def event(self, event):
+        super().event(event)
+
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 self.sound.play()
                 main()
 
+class ExitButton(Button):
+    def __init__(self, x, y, width, height, text):
+        super().__init__(x, y, width, height, text)
+
+    def event(self, event):
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                self.sound.play()
+                pygame.time.delay(300)
+                pygame.quit()
+                sys.exit()
 
 
 def main_menu():
@@ -95,12 +117,8 @@ def main_menu():
     screen.fill((255, 255, 255))
     running = True
 
-    # отрисовка кнопки звездочки
-    play_button = Button(290, 290, 100, 50, "PLAY")
-    # button_image1 = load_image('star.png')
-    # button_image1 = pygame.transform.scale(button_image1, (150, 150))
-    # button_rect1 = button_image1.get_rect(topleft=(150, 350))
-
+    play_button = PlayButton(290, 290, 100, 50, "PLAY")
+    exit_button = ExitButton(290, 440, 100, 50, "EXIT")
 
     image = load_image("yellow_cursor2.png")
 
@@ -121,6 +139,7 @@ def main_menu():
             # screen.blit(button_image1, button_rect1)
 
             play_button.draw(screen)
+            exit_button.draw(screen)
             # отрисовка названия
             screen.blit(title, (200, 50))
 
@@ -137,6 +156,7 @@ def main_menu():
             pygame.mouse.set_visible(False)
 
             play_button.event(event)
+            exit_button.event(event)
 
         pygame.display.flip()
     pygame.quit()
