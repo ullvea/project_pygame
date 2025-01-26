@@ -8,6 +8,9 @@
         "."
     ],
     "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
         "Kirby_character.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
@@ -23,11 +26,11 @@
             "scaleInDock": 1
         },
         "map_vegetable_vallue.tmx": {
-            "scale": 3,
-            "selectedLayer": 5,
+            "scale": 1.5,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 342.66666666666663,
-                "y": 104.49999999999999
+                "x": 824,
+                "y": 41.66666666666666
             }
         },
         "map_vegetable_vallue.tmx#Fly": {
@@ -40,7 +43,7 @@
             "scaleInDock": 1
         }
     },
-    "last.imagePath": "C:/Users/User/PycharmProjects/pygame_project/tmx_files",
+    "last.imagePath": "C:/Users/User/PycharmProjects/pygame_project/data",
     "map.height": 11,
     "map.lastUsedFormat": "tmx",
     "map.renderOrder": null,

@@ -53,10 +53,8 @@ class FirstLevel:
 
         for obj in tmx_map.get_layer_by_name('enemies'):
             if obj.name == 'waddle_doo':
-                self.waddle_doo = WaddleDoo((obj.x * 2, obj.y * 2),
+                waddle_doo = WaddleDoo((obj.x * 2, obj.y * 2),
                                             all_sprites, self.waddle_doo_sprites, self.obstacle_sprites,
                                             self.kirby)
-            """if obj.name == 'fly':
-                self.fly = Fly((obj.x * 2, obj.y * 2),
-                                                self.all_sprites, self.waddle_doo_sprites, self.obstacle_sprites,
-                                                self.kirby)"""
+            if obj.name == 'fly':
+                 Fly((obj.x * 2, obj.y * 2), all_sprites, self.obstacle_sprites, self.kirby)

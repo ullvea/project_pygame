@@ -3,6 +3,37 @@ import pygame.transform
 from classes.base import *
 import math
 
+class Fly(pygame.sprite.Sprite):
+    def __init__(self, pos, groups, obstacle_sprites, player):
+        super().__init__(groups)
+        self.colorkeys = [(98, 130, 179), (116, 154, 212), (111, 147, 201), (84, 110, 140)]
+        self.image = load_image('Fly.png', self.colorkeys)
+        self.rect = self.image.get_rect(topleft=pos)
+        self.animation = AnimatedSprite(load_image('Fly_fly.png', self.colorkeys),
+                                        2, 1, 36, 16)
+        self.obstacle_sprites = obstacle_sprites
+        self.player = player
+        self.speed = -6
+        self.orientation = True
+
+    def mirror(self):
+        """Функция, отвечающая за отзеркаливание изображения"""
+        if not self.orientation:  # Зеркалим изображение
+            self.image = pygame.transform.flip(self.image, True, False)
+
+    def move(self):
+        self.rect.x += self.speed
+        if pygame.sprite.spritecollideany(self, self.obstacle_sprites):
+            self.speed *= -1
+            self.orientation = not self.orientation
+
+
+    def update(self):
+        self.move()
+        self.image = self.animation.image
+        self.mirror()
+
+
 
 class WaddleDoo(pygame.sprite.Sprite):
     def __init__(self, pos, groups, waddle_doo_sprites, obstacle_sprites, player):
@@ -112,8 +143,8 @@ class WaddleDoo(pygame.sprite.Sprite):
             self.rect.x -= direction.x * self.speed * 5
             self.rect.y -= direction.y * self.speed * 5
 
-            new_width = int(self.image.get_width() * 0.5)
-            new_height = int(self.image.get_height() * 0.5)
+            new_width = int(self.image.get_width() * 0.7)
+            new_height = int(self.image.get_height() * 0.7)
             if new_width == 0 or new_height == 0:
                 self.kill()
             self.image = pygame.transform.smoothscale(self.image, (new_width, new_height))
