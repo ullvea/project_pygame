@@ -31,6 +31,7 @@ class Fly(pygame.sprite.Sprite):
     def update(self):
         self.move()
         self.image = self.animation.image
+        self.animation.update()
         self.mirror()
 
 
@@ -169,7 +170,7 @@ class WaddleDoo(pygame.sprite.Sprite):
 
 class Shot(pygame.sprite.Sprite):
     def __init__(self, image, x, y, speed, orientation):
-        super().__init__(all_sprites, sprite_shots_group)
+        super().__init__(all_sprites, sprite_shots_group, damage_sprites)
         self.image = image
         self.orientation = orientation
         self.speed_x = speed[0]

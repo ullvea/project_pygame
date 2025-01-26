@@ -19,8 +19,10 @@ class FirstLevel:
         for sprite in all_sprites:
             camera.apply(sprite)
         all_sprites.update()
+        objects_sprites.update()
         screen.fill((60, 188, 252))
         all_sprites.draw(self.surface)
+        objects_sprites.draw(self.surface)
 
     def surfx2(self, surf):
         """Функция, увеличивающая размер тайла"""
@@ -54,7 +56,7 @@ class FirstLevel:
         for obj in tmx_map.get_layer_by_name('enemies'):
             if obj.name == 'waddle_doo':
                 waddle_doo = WaddleDoo((obj.x * 2, obj.y * 2),
-                                            all_sprites, self.waddle_doo_sprites, self.obstacle_sprites,
+                                       all_sprites, self.waddle_doo_sprites, self.obstacle_sprites,
                                             self.kirby)
             if obj.name == 'fly':
-                 Fly((obj.x * 2, obj.y * 2), all_sprites, self.obstacle_sprites, self.kirby)
+                 Fly((obj.x * 2, obj.y * 2), (all_sprites, damage_sprites), self.obstacle_sprites, self.kirby)

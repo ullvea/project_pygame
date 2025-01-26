@@ -1,5 +1,5 @@
 from classes.base import *
-
+from classes.objects import *
 
 class Kirby(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites, confines_sprites, can_jump_sprites):
@@ -8,6 +8,7 @@ class Kirby(pygame.sprite.Sprite):
                      (109, 144, 199), (110, 146, 199), (111, 147, 201), (113, 151, 206), (114, 152, 209),
                      (116, 154, 212), (116, 154, 212), (114, 151, 208), (110, 145, 200), (93, 122, 159), (107, 142, 193),
                      (92, 121, 158))
+        self.hearts = Hearts()
 
         self.image = load_image('Kirby_character.png', colorkeys)
         self.jump_image = load_image('Kirby_jump.png', colorkeys)
@@ -195,6 +196,9 @@ class Kirby(pygame.sprite.Sprite):
 
         if pygame.sprite.spritecollideany(self, self.can_jump_sprites):
             self.is_jumping = True
+
+        if pygame.sprite.spritecollideany(self, damage_sprites):
+            self.hearts.flag = True
 
         for item in self.confines_sprites:
             if self.rect.left > item.rect.left:
