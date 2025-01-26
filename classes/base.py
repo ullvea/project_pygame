@@ -64,6 +64,35 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.image = self.frames[self.cur_frame]
 
 
+
+# Класс кнопки
+class Button:
+    def __init__(self, x, y, width, height, text):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.text = text
+        self.color = pygame.Color('red')
+        self.hovered = False
+        self.sound = pygame.mixer.Sound('sound\\btn_click.mp3')
+
+    def draw(self, surface):
+        # Изменение цвета при наведении курсора
+        if self.hovered:
+            pygame.draw.rect(surface, pygame.Color('pink'), self.rect)
+        else:
+            pygame.draw.rect(surface, self.color, self.rect)
+
+        # заменить шрифт: comicsansms
+        font = pygame.font.Font('font.ttf', 30)
+        text_surface = font.render(self.text, True, pygame.Color('white'))
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        surface.blit(text_surface, text_rect)
+
+    def event(self, event):
+        if event.type == pygame.MOUSEMOTION:
+            # Проверка на наведение курсора
+            self.hovered = self.rect.collidepoint(event.pos)
+
+
 obstacles = pygame.sprite.Group()
 animated_sprites = pygame.sprite.Group()
 sprite_shots_group = pygame.sprite.Group()

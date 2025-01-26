@@ -1,4 +1,3 @@
-from classes.base import *
 from classes.kirby import Kirby
 from classes.enemies import *
 

@@ -38,9 +38,6 @@ def main():
             # изображение курсора
             screen.blit(image_cur, (x, y))
 
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #     if button_rect1.collidepoint(event.pos):
-        #         print("Кнопка нажата!")
 
         pygame.mouse.set_visible(False)
         pygame.display.flip()
@@ -48,33 +45,6 @@ def main():
 
     pygame.quit()
 
-
-# Класс кнопки
-class Button:
-    def __init__(self, x, y, width, height, text):
-        self.rect = pygame.Rect(x, y, width, height)
-        self.text = text
-        self.color = pygame.Color('red')
-        self.hovered = False
-        self.sound = pygame.mixer.Sound('sound\\btn_click.mp3')
-
-    def draw(self, surface):
-        # Изменение цвета при наведении курсора
-        if self.hovered:
-            pygame.draw.rect(surface, pygame.Color('pink'), self.rect)
-        else:
-            pygame.draw.rect(surface, self.color, self.rect)
-
-        # заменить шрифт: comicsansms
-        font = pygame.font.Font('font.ttf', 30)
-        text_surface = font.render(self.text, True, pygame.Color('white'))
-        text_rect = text_surface.get_rect(center=self.rect.center)
-        surface.blit(text_surface, text_rect)
-
-    def event(self, event):
-        if event.type == pygame.MOUSEMOTION:
-            # Проверка на наведение курсора
-            self.hovered = self.rect.collidepoint(event.pos)
 
 class PlayButton(Button):
     def __init__(self, x, y, width, height, text):
@@ -88,6 +58,7 @@ class PlayButton(Button):
             if self.hovered:
                 self.sound.play()
                 main()
+
 
 class ExitButton(Button):
     def __init__(self, x, y, width, height, text):
@@ -151,7 +122,6 @@ def main_menu():
             # if event.type == pygame.MOUSEBUTTONDOWN:
             #     if button_rect1.collidepoint(event.pos):
             #         print("Кнопка нажата!")
-
 
             pygame.mouse.set_visible(False)
 
