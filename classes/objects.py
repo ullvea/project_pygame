@@ -13,7 +13,9 @@ class Hearts(pygame.sprite.Sprite):
 
     def update(self):
         if self.flag:
-            self.image = pygame.transform.scale(self.animation.image, (100, 30))
             self.animation.update()
+            self.image = pygame.transform.scale(self.animation.image, (100, 30))
             self.flag = False
-            print('p')
+            if self.animation.image == self.animation.frames[4]:
+                pass
+                # экран проигрыша

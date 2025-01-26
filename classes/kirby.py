@@ -197,9 +197,6 @@ class Kirby(pygame.sprite.Sprite):
         if pygame.sprite.spritecollideany(self, self.can_jump_sprites):
             self.is_jumping = True
 
-        if pygame.sprite.spritecollideany(self, damage_sprites):
-            self.hearts.flag = True
-
         for item in self.confines_sprites:
             if self.rect.left > item.rect.left:
                 camera.flag = False

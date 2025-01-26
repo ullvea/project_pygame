@@ -27,12 +27,14 @@ class Fly(pygame.sprite.Sprite):
             self.speed *= -1
             self.orientation = not self.orientation
 
+        if pygame.sprite.spritecollideany(self, kirby_sprites):
+            self.player.hearts.flag = True
+            self.kill()
+
 
 
     def update(self):
         self.move()
-        if pygame.sprite.spritecollideany(self, kirby_sprites):
-            self.kill()
         self.image = self.animation.image
         self.animation.update()
         self.mirror()
@@ -92,6 +94,7 @@ class WaddleDoo(pygame.sprite.Sprite):
 
         for item in sprite_shots_group:  # Выстрелы должны удалятся при столкновении с Кирби
             if pygame.sprite.spritecollideany(item, kirby_sprites):
+                self.player.hearts.flag = True
                 item.kill()
 
     def move(self):

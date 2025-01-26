@@ -1,10 +1,13 @@
+import pygame.mixer
+
 from classes.base import *
 from classes.first_level import FirstLevel
 
 
 class Map:
     def __init__(self):
-        self.tmx_map = {0: load_pygame('tmx_files\\map_vegetable_vallue.tmx')}
+        self.tmx_map = {0: load_pygame('tmx_files\\map_vegetable_vallue.tmx'),
+                        1: load_pygame('tmx_files\\map_vegetable_vallue_2.tmx')}
         self.current_level = FirstLevel(self.tmx_map[0])
 
     def run(self):
@@ -51,6 +54,7 @@ class Button:
         self.text = text
         self.color = pygame.Color('red')
         self.hovered = False
+        self.sound = pygame.mixer.Sound('sound\\btn_click.mp3')
 
     def draw(self, surface):
         # Изменение цвета при наведении курсора
@@ -73,12 +77,15 @@ class Button:
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Проверка нажатия кнопки мыши
             if self.hovered:
+                self.sound.play()
                 main()
-                print("игра началась :)")
+
 
 
 def main_menu():
     pygame.init()
+    menu_sound = pygame.mixer.Sound('sound\\menu_sound.mp3')
+    menu_sound.play(-1)
     # print(pygame.font.get_fonts()) системные шрифты
     pygame.display.set_caption("Menu")
     back_ground = load_image("clouds.jpg")
@@ -135,7 +142,5 @@ def main_menu():
     pygame.quit()
 
 
-main_menu()
-
 if __name__ == "__main__":
-    main()
+    main_menu()
