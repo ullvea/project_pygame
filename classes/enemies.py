@@ -28,8 +28,11 @@ class Fly(pygame.sprite.Sprite):
             self.orientation = not self.orientation
 
 
+
     def update(self):
         self.move()
+        if pygame.sprite.spritecollideany(self, kirby_sprites):
+            self.kill()
         self.image = self.animation.image
         self.animation.update()
         self.mirror()
