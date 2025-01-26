@@ -54,7 +54,7 @@ class Kirby(pygame.sprite.Sprite):
 
         # Таймеры для анимации
         self.animation_timer = 0
-        self.animation_timer_eating = 500
+        self.animation_timer_eating = 150
         self.animation_delay = 100
         self.animation_delay_fly = 75
         self.extra_animation_timer = self.animation_delay_fly * len(self.start_fly_animation.frames)
