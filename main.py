@@ -15,6 +15,7 @@ def main():
     pygame.init()
     pygame.display.set_caption('Kirby\'s Adventure')
     image = load_image("logo.webp")
+    image_cur = load_image("yellow_cursor2.png")
     pygame.display.set_icon(image)
 
     clock = pygame.time.Clock()
@@ -27,6 +28,16 @@ def main():
                 running = False
 
         game_map.run()
+        if pygame.mouse.get_focused():
+            x, y = pygame.mouse.get_pos()
+            # изображение курсора
+            screen.blit(image_cur, (x, y))
+
+        # if event.type == pygame.MOUSEBUTTONDOWN:
+        #     if button_rect1.collidepoint(event.pos):
+        #         print("Кнопка нажата!")
+
+        pygame.mouse.set_visible(False)
         pygame.display.flip()
         clock.tick(FPS)
 

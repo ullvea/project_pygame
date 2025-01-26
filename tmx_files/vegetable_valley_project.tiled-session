@@ -26,11 +26,11 @@
             "scaleInDock": 1
         },
         "map_vegetable_vallue.tmx": {
-            "scale": 1.5,
+            "scale": 11,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 824,
-                "y": 41.66666666666666
+                "x": 754,
+                "y": 69.95454545454545
             }
         },
         "map_vegetable_vallue.tmx#Fly": {
