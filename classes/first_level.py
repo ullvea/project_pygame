@@ -33,6 +33,9 @@ class FirstLevel:
         for x, y, surf in tmx_map.get_layer_by_name('beautiful_background').tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf), all_sprites)
 
+        for x, y, surf in tmx_map.get_layer_by_name('door').tiles():
+            Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf), (all_sprites, next_lvl_sprites))
+
 
         for x, y, surf in tmx_map.get_layer_by_name('tiles_for_waddle_doo').tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf),

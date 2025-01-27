@@ -43,11 +43,11 @@
             "scaleInDock": 1
         },
         "map_vegetable_vallue.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 2,
+            "scale": 4,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 447,
-                "y": 477
+                "x": 916.5,
+                "y": 99.875
             }
         },
         "map_vegetable_vallue.tmx#Fly": {
@@ -66,8 +66,8 @@
             "scale": 1,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 399,
-                "y": 240.5
+                "x": 398,
+                "y": 239.5
             }
         },
         "map_vegetable_vallue_2.tmx#lvl1_RoomB": {

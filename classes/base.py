@@ -9,6 +9,7 @@ FPS = 25
 TILE_SIZE = 32
 
 stop_game = False
+clock = pygame.time.Clock()
 
 
 class Sprite(pygame.sprite.Sprite):
@@ -124,6 +125,7 @@ kirby_sprites = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 objects_sprites = pygame.sprite.Group()
 damage_sprites = pygame.sprite.Group()
+next_lvl_sprites = pygame.sprite.Group()
 camera = Camera()
 
 

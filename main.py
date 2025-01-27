@@ -12,10 +12,73 @@ class Map:
     def __init__(self):
         self.tmx_map = {0: load_pygame('tmx_files\\map_vegetable_vallue.tmx'),
                         1: load_pygame('tmx_files\\lvl2.tmx')}
-        self.current_level = FirstLevel(self.tmx_map[0])
+        self.key = 0
+        self.current_level = FirstLevel(self.tmx_map[self.key])
+        self.flag = False
 
     def run(self, stop_game):
         self.current_level.run(stop_game)
+        if pygame.sprite.spritecollideany(self.current_level.kirby, next_lvl_sprites):
+            loading()
+            self.current_level = FirstLevel(self.tmx_map[self.key])
+
+
+def loading():
+    pygame.init()
+    pygame.display.set_caption('Kirby\'s Adventure')
+    image = load_image("logo.webp")
+    image_cur = load_image("yellow_cursor2.png")
+    pygame.display.set_icon(image)
+    running = True
+
+    font = pygame.font.Font('font.ttf', 50)
+    text_surface1 = font.render('loading', True, pygame.Color('black'))
+    text_surface2 = font.render('loading.', True, pygame.Color('black'))
+    text_surface3 = font.render('loading..', True, pygame.Color('black'))
+    text_surface4 = font.render('loading...', True, pygame.Color('black'))
+    text_rect = text_surface1.get_rect(center=(350, 100))
+    text_surface = [text_surface1, text_surface1, text_surface1, text_surface1,
+                    text_surface2, text_surface2, text_surface2, text_surface2,
+                    text_surface3, text_surface3, text_surface3, text_surface3,
+                    text_surface4, text_surface4, text_surface4, text_surface4]
+    cnt = 0
+    # os.listdir() в Python — это метод для получения списка всех файлов и каталогов в указанном каталоге
+    # Функция os.path.join() используется для объединения нескольких путей.
+    # Она учитывает особенности операционной системы и добавляет соответствующий разделитель между путями
+
+    frames = []
+    delay = 75
+    for filename in os.listdir("loading"):
+        frame = pygame.image.load(os.path.join("loading", filename))
+        frames.append(frame)
+    image_ind = 0
+    last_delay = pygame.time.get_ticks()
+    start_time = pygame.time.get_ticks()
+    while running:
+        current = pygame.time.get_ticks()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        screen.fill((255, 255, 255))
+        screen.blit(text_surface[cnt % 16], text_rect)
+        cnt += 1
+
+        if current - last_delay > delay:
+            last_delay = current
+            image_ind += 1
+        screen.blit(frames[image_ind % len(frames)], (130, 150))
+        if pygame.mouse.get_focused():
+            x, y = pygame.mouse.get_pos()
+            # изображение курсора
+            screen.blit(image_cur, (x, y))
+
+        pygame.mouse.set_visible(False)
+        pygame.display.flip()
+        clock.tick(FPS)
+    if start_time - current > 5000:
+        running = False
+    pygame.quit()
 
 
 class PauseButton(ImageButton):
@@ -58,7 +121,6 @@ def main():
     pause_stop_button = PauseStopButton((650, 0), 'pause_stop_btn.png',
                                          'pause_stop_btn_hovered.png', scale=0.5)
 
-    clock = pygame.time.Clock()
     running = True
     game_map = Map()
 
@@ -181,8 +243,6 @@ def rule():
     text_surface = font.render('RULES', True, pygame.Color('black'))
     text_rect = text_surface.get_rect(center=(350, 100))
 
-
-    clock = pygame.time.Clock()
     running = True
 
     return_button = ReturnButton(10, 10, 100, 50, "MENU")
