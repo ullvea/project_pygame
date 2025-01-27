@@ -104,7 +104,6 @@ class RulesButton(Button):
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 self.sound.play()
-                print('x')
                 rule()
 
 
@@ -198,9 +197,10 @@ def main_menu():
 
     play_button = PlayButton(WIDTH // 2 - 75, 250, 150, 50, "PLAY")
     exit_button = ExitButton(WIDTH // 2 - 75 , 440, 150, 50, "EXIT")
+    rules_button = RulesButton(WIDTH // 2 - 75, 310, 150, 50, "RULES")
 
 
-    settings_button = SettingsButton(WIDTH // 2 - 75, 365, 150, 50, "SETTINGS")
+    settings_button = SettingsButton(WIDTH // 2 - 75, 370, 150, 50, "SETTINGS")
     font = pygame.font.Font('font.ttf', 30)
     text_surface = font.render("MAX SCORE:", True, pygame.Color('black'))
     text_rect = text_surface.get_rect()
@@ -213,7 +213,6 @@ def main_menu():
     text_rect2.center = (210, 350)
     sound_btn = ImageButton((370, 320),'sound_play.png', 'sound_play_hovered.png' )
 
-    rules_button = RulesButton(280, 310, 150, 50, "RULES")
 
 
     image = load_image("yellow_cursor2.png")
