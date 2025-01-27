@@ -14,12 +14,12 @@ class Map:
                         1: load_pygame('tmx_files\\lvl2.tmx')}
         self.key = 0
         self.current_level = FirstLevel(self.tmx_map[self.key])
-        self.flag = False
 
     def run(self, stop_game):
         self.current_level.run(stop_game)
         if pygame.sprite.spritecollideany(self.current_level.kirby, next_lvl_sprites):
             loading()
+            self.key += 1
             self.current_level = FirstLevel(self.tmx_map[self.key])
 
 
@@ -53,9 +53,11 @@ def loading():
         frames.append(frame)
     image_ind = 0
     last_delay = pygame.time.get_ticks()
-    start_time = pygame.time.get_ticks()
+    start = pygame.time.get_ticks()
     while running:
         current = pygame.time.get_ticks()
+        if current - start > 3000:
+            break
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -72,13 +74,10 @@ def loading():
             x, y = pygame.mouse.get_pos()
             # изображение курсора
             screen.blit(image_cur, (x, y))
-
         pygame.mouse.set_visible(False)
         pygame.display.flip()
         clock.tick(FPS)
-    if start_time - current > 5000:
-        running = False
-    pygame.quit()
+
 
 
 class PauseButton(ImageButton):
