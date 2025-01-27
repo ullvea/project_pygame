@@ -150,6 +150,31 @@ def rule():
 
     return_button = ReturnButton(10, 10, 100, 50, "MENU")
 
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        screen.blit(back_ground, (0, 0))
+
+        return_button.draw(screen)
+
+        screen.blit(text_surface, text_rect)
+        screen.blit(up, (250, 200))
+        screen.blit(move, (400, 300))
+        screen.blit(jump, (300, 200))
+        if pygame.mouse.get_focused():
+            x, y = pygame.mouse.get_pos()
+            # изображение курсора
+            screen.blit(image_cur, (x, y))
+
+        return_button.event(event)
+        pygame.mouse.set_visible(False)
+        pygame.display.flip()
+        clock.tick(FPS)
+
+    pygame.quit()
+
 
 
 def main_menu():

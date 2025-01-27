@@ -124,7 +124,7 @@ class RulesButton(Button):
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 self.sound.play()
-                main()
+                rule()
 
 
 class ExitButton(Button):
