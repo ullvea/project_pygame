@@ -72,12 +72,17 @@ def rule():
     jump = load_image('Kirby_jump.png')
     jump = pygame.transform.scale(jump, (50, 50))
 
+    return_button = ReturnButton(10, 10, 100, 50, "MENU")
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
         screen.blit(back_ground, (0, 0))
+
+        return_button.draw(screen)
+
         screen.blit(text_surface, text_rect)
         screen.blit(up, (250, 200))
         screen.blit(move, (400, 300))
@@ -87,7 +92,7 @@ def rule():
             # изображение курсора
             screen.blit(image_cur, (x, y))
 
-
+        return_button.event(event)
         pygame.mouse.set_visible(False)
         pygame.display.flip()
         clock.tick(FPS)
@@ -137,6 +142,19 @@ class ExitButton(Button):
                 sys.exit()
 
 
+class ReturnButton(Button):
+    def __init__(self, x, y, width, height, text):
+        super().__init__(x, y, width, height, text)
+
+    def event(self, event):
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                self.sound.play()
+                main_menu()
+
+
 def main_menu():
     pygame.init()
     menu_sound = pygame.mixer.Sound('sound\\menu_sound.mp3')
@@ -174,6 +192,7 @@ def main_menu():
             rules_button.draw(screen)
             play_button.draw(screen)
             exit_button.draw(screen)
+
             # отрисовка названия
             screen.blit(title, (200, 50))
 
@@ -191,6 +210,7 @@ def main_menu():
             rules_button.event(event)
             play_button.event(event)
             exit_button.event(event)
+
 
         pygame.display.flip()
     pygame.quit()
