@@ -93,6 +93,21 @@ class ExitButton(Button):
                 sys.exit()
 
 
+class RulesButton(Button):
+    def __init__(self, x, y, width, height, text):
+        super().__init__(x, y, width, height, text)
+
+    def event(self, event):
+        super().event(event)
+
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                self.sound.play()
+                print('x')
+                rule()
+
+
 
 class ReturnButton(Button):
     def __init__(self, x, y, width, height, text):
@@ -168,7 +183,7 @@ def main_menu():
     text_rect2.center = (210, 350)
     sound_btn = ImageButton((370, 320),'sound_play.png', 'sound_play_hovered.png' )
 
-    rules_button = PlayButton(280, 310, 150, 50, "RULES")
+    rules_button = RulesButton(280, 310, 150, 50, "RULES")
 
 
     image = load_image("yellow_cursor2.png")
