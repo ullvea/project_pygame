@@ -68,7 +68,8 @@ def main():
                 pause_button.event(event)
             else:
                 pause_stop_button.event(event)
-        game_map.run()
+        if not stop_game:
+            game_map.run()
         if not stop_game:
             pause_button.draw()
         else:
