@@ -195,7 +195,7 @@ def rule():
     font = pygame.font.SysFont('comicsansms', 20)
     text_jump = font.render('1) Чтобы Кирби полетела нужно зажать стрелочку вверх',
                             True, pygame.Color('purple'))
-    rect_jump = text_jump.get_rect(center=(300, 180))
+    rect_jump = text_jump.get_rect(center=(400, 180))
 
     return_button = ReturnButton(10, 10, 100, 50, "MENU")
 
