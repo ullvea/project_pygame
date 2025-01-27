@@ -102,11 +102,16 @@ class ImageButton:
 
     def draw(self):
         # Изменение цвета при наведении курсора
-        if self.rect.collidepoint(pygame.mouse.get_pos()):
+        if self.hovered:
             self.image = self.hovered_image
         else:
             self.image = self.normal_image
         screen.blit(self.image, self.rect.topleft)
+
+    def event(self, event):
+        if event.type == pygame.MOUSEMOTION:
+            # Проверка на наведение курсора
+            self.hovered = self.rect.collidepoint(event.pos)
 
 
 obstacles = pygame.sprite.Group()
