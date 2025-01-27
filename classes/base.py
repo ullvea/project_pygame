@@ -126,6 +126,17 @@ all_sprites = pygame.sprite.Group()
 objects_sprites = pygame.sprite.Group()
 damage_sprites = pygame.sprite.Group()
 next_lvl_sprites = pygame.sprite.Group()
+
+def clear_groups():
+    obstacles.empty()
+    animated_sprites.empty()
+    sprite_shots_group.empty()
+    kirby_sprites.empty()
+    all_sprites.empty()
+    objects_sprites.empty()
+    damage_sprites.empty()
+    next_lvl_sprites.empty()
+
 camera = Camera()
 
 

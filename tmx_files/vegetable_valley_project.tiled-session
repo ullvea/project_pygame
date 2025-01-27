@@ -29,12 +29,18 @@
             "scaleInDock": 1
         },
         "lvl2.tmx": {
+            "expandedObjectLayers": [
+                8
+            ],
             "scale": 0.75,
-            "selectedLayer": 0,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 798,
-                "y": 127.33333333333331
+                "x": 1134.6666666666665,
+                "y": 120.66666666666663
             }
+        },
+        "lvl2.tmx#Fly": {
+            "scaleInDock": 1
         },
         "lvl2.tmx#lvl2": {
             "scaleInDock": 1
@@ -88,6 +94,7 @@
     ],
     "project": "vegetable_valley_project.tiled-project",
     "recentFiles": [
+        "lvl2.tmx",
         "map_vegetable_vallue_2.tmx",
         "Kirby_character.tsx",
         "Vegetable_Valley_1_Room_A_tiles.tsx",

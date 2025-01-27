@@ -20,6 +20,7 @@ class Map:
         if pygame.sprite.spritecollideany(self.current_level.kirby, next_lvl_sprites):
             loading()
             self.key += 1
+            clear_groups()
             self.current_level = FirstLevel(self.tmx_map[self.key])
 
 
@@ -79,7 +80,6 @@ def loading():
         clock.tick(FPS)
 
 
-
 class PauseButton(ImageButton):
     def __init__(self, pos, image, hovered_image, scale):
         super().__init__(pos, image, hovered_image, scale)
@@ -118,7 +118,7 @@ def main():
 
     pause_button = PauseButton((650, 0), 'pause_btn.png', 'pause_btn_hovered.png', scale=0.5)
     pause_stop_button = PauseStopButton((650, 0), 'pause_stop_btn.png',
-                                         'pause_stop_btn_hovered.png', scale=0.5)
+                                        'pause_stop_btn_hovered.png', scale=0.5)
 
     running = True
     game_map = Map()
@@ -144,7 +144,6 @@ def main():
             # изображение курсора
             screen.blit(image_cur, (x, y))
 
-
         pygame.mouse.set_visible(False)
         pygame.display.flip()
         clock.tick(FPS)
@@ -169,7 +168,6 @@ class PlayButton(Button):
 class SettingsButton(Button):
     def __init__(self, x, y, width, height, text):
         super().__init__(x, y, width, height, text)
-
 
     def event(self, event):
         global showsettings
@@ -210,7 +208,6 @@ class RulesButton(Button):
             if self.hovered:
                 self.sound.play()
                 rule()
-
 
 
 class ReturnButton(Button):
@@ -270,7 +267,6 @@ def rule():
     pygame.quit()
 
 
-
 def main_menu():
     global showsettings
     pygame.init()
@@ -286,9 +282,8 @@ def main_menu():
     running = True
 
     play_button = PlayButton(WIDTH // 2 - 75, 250, 150, 50, "PLAY")
-    exit_button = ExitButton(WIDTH // 2 - 75 , 440, 150, 50, "EXIT")
+    exit_button = ExitButton(WIDTH // 2 - 75, 440, 150, 50, "EXIT")
     rules_button = RulesButton(WIDTH // 2 - 75, 310, 150, 50, "RULES")
-
 
     settings_button = SettingsButton(WIDTH // 2 - 75, 370, 150, 50, "SETTINGS")
     font = pygame.font.Font('font.ttf', 30)
@@ -301,10 +296,8 @@ def main_menu():
     text_surface2 = font.render("SOUND:", True, pygame.Color('black'))
     text_rect2 = text_surface2.get_rect()
     text_rect2.center = (210, 350)
-    sound_btn = ImageButton((370, 320),'sound_play.png', 'sound_play_hovered.png')
+    sound_btn = ImageButton((370, 320), 'sound_play.png', 'sound_play_hovered.png')
     exit_settings = ReturnButton(WIDTH // 2 - 120, 420, 240, 50, "EXIT SETTINGS")
-
-
 
     image = load_image("yellow_cursor2.png")
     screen_im = load_image('settings_image.png', [], 2.6)
