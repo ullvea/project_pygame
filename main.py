@@ -13,8 +13,8 @@ class Map:
                         1: load_pygame('tmx_files\\lvl2.tmx')}
         self.current_level = FirstLevel(self.tmx_map[0])
 
-    def run(self):
-        self.current_level.run()
+    def run(self, stop_game):
+        self.current_level.run(stop_game)
 
 
 class PauseButton(ImageButton):
@@ -68,8 +68,8 @@ def main():
                 pause_button.event(event)
             else:
                 pause_stop_button.event(event)
-        if not stop_game:
-            game_map.run()
+
+        game_map.run(stop_game)
         if not stop_game:
             pause_button.draw()
         else:

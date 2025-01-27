@@ -12,13 +12,14 @@ class FirstLevel:
         self.waddle_doo_sprites = pygame.sprite.Group()
         self.tmx(tmx_map)
 
-    def run(self):
+    def run(self, stop_game):
         camera.update(self.kirby)
         for sprite in all_sprites:
             camera.apply(sprite)
-        all_sprites.update()
-        objects_sprites.update()
         screen.fill((60, 188, 252))
+        if not stop_game:
+            objects_sprites.update()
+            all_sprites.update()
         all_sprites.draw(self.surface)
         objects_sprites.draw(self.surface)
 
