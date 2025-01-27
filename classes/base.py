@@ -1,12 +1,10 @@
 import os
-
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'  # Чтобы не писало "Hello from pygame..."
 import pygame
 import sys
 from pytmx import *
 
-size = width, height = 700, 525
-screen = pygame.display.set_mode((width, height))
+size = WIDTH, HEIGHT = 700, 525
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 25
 TILE_SIZE = 32
 
@@ -37,8 +35,8 @@ class Camera:
 
     # позиционировать камеру на объекте target
     def update(self, target):
-        self.dx = -(target.rect.x + target.rect.w // 8 - width // 8)
-        self.dy = -(target.rect.y + target.rect.h // 1.5 - height // 1.5)
+        self.dx = -(target.rect.x + target.rect.w // 8 - WIDTH // 8)
+        self.dy = -(target.rect.y + target.rect.h // 1.5 - HEIGHT // 1.5)
 
 
 class AnimatedSprite(pygame.sprite.Sprite):
@@ -91,6 +89,32 @@ class Button:
         if event.type == pygame.MOUSEMOTION:
             # Проверка на наведение курсора
             self.hovered = self.rect.collidepoint(event.pos)
+
+
+
+class ImageButton:
+    def __init__(self,  pos, image, hovered_image):
+        self.normal_image = load_image(image, [], 1)
+        self.image = self.normal_image
+        self.rect = self.image.get_rect(topleft=pos)
+        self.hovered_image = load_image(hovered_image, [], 1)
+        self.hovered = False
+
+    def draw(self):
+        # Изменение цвета при наведении курсора
+        if self.rect.collidepoint(pygame.mouse.get_pos()):
+            self.image = self.hovered_image
+        else:
+            self.image = self.normal_image
+        screen.blit(self.image, self.rect.topleft)
+
+
+
+
+
+
+
+
 
 
 obstacles = pygame.sprite.Group()

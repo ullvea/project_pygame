@@ -29,16 +29,13 @@ class FirstLevel:
 
     def tmx(self, tmx_map):
         """Функция, добавляющая cпрайты в группы"""
-        for x, y, surf in tmx_map.get_layer_by_name('Surface').tiles():
-            Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf),
-                   (all_sprites, self.obstacle_sprites))
+        for x, y, surf in tmx_map.get_layer_by_name('beautiful_background').tiles():
+            Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf), all_sprites)
+
 
         for x, y, surf in tmx_map.get_layer_by_name('tiles_for_waddle_doo').tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf),
                    (self.waddle_doo_sprites, all_sprites))
-
-        for x, y, surf in tmx_map.get_layer_by_name('beautiful_background').tiles():
-            Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf), all_sprites)
 
         for x, y, surf in tmx_map.get_layer_by_name('can_jump').tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf), (all_sprites, self.can_jump_sprites))
@@ -46,6 +43,10 @@ class FirstLevel:
         for x, y, surf in tmx_map.get_layer_by_name('stop_camera').tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf),
                    (all_sprites, self.confines_sprites))
+
+        for x, y, surf in tmx_map.get_layer_by_name('Surface').tiles():
+            Sprite((x * TILE_SIZE, y * TILE_SIZE), self.surfx2(surf),
+                   (all_sprites, self.obstacle_sprites))
 
         for obj in tmx_map.get_layer_by_name('main'):
             self.kirby = Kirby((obj.x * 2, obj.y * 2),
