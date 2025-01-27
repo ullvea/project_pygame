@@ -109,14 +109,6 @@ class ImageButton:
         screen.blit(self.image, self.rect.topleft)
 
 
-
-
-
-
-
-
-
-
 obstacles = pygame.sprite.Group()
 animated_sprites = pygame.sprite.Group()
 sprite_shots_group = pygame.sprite.Group()
