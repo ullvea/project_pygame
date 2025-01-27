@@ -168,7 +168,7 @@ def rule():
             # изображение курсора
             screen.blit(image_cur, (x, y))
 
-        return_button.event(event)
+        #return_button.event(event)
         pygame.mouse.set_visible(False)
         pygame.display.flip()
         clock.tick(FPS)
