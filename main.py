@@ -151,6 +151,11 @@ def rule():
     eat = load_image('Kirby_start_eating.png')
     eat = pygame.transform.scale(eat, (80, 50))
 
+    font = pygame.font.SysFont('comicsansms', 20)
+    text_jump = font.render('1) Чтобы Кирби полетела нужно зажать стрелочку вверх',
+                            True, pygame.Color('purple'))
+    rect_jump = text_jump.get_rect(center=(300, 180))
+
     return_button = ReturnButton(10, 10, 100, 50, "MENU")
 
     while running:
@@ -158,24 +163,25 @@ def rule():
             if event.type == pygame.QUIT:
                 running = False
 
-        screen.blit(back_ground, (0, 0))
+            screen.blit(back_ground, (0, 0))
 
-        return_button.draw(screen)
+            return_button.draw(screen)
 
-        screen.blit(text_surface, text_rect)
-        screen.blit(up, (250, 200))
-        screen.blit(move, (360, 300))
-        screen.blit(jump, (300, 200))
-        screen.blit(eat, (300, 430))
-        if pygame.mouse.get_focused():
-            x, y = pygame.mouse.get_pos()
-            # изображение курсора
-            screen.blit(image_cur, (x, y))
+            screen.blit(text_surface, text_rect)
+            screen.blit(text_jump, rect_jump)
+            screen.blit(up, (250, 200))
+            screen.blit(move, (360, 300))
+            screen.blit(jump, (300, 200))
+            screen.blit(eat, (300, 430))
+            if pygame.mouse.get_focused():
+                x, y = pygame.mouse.get_pos()
+                # изображение курсора
+                screen.blit(image_cur, (x, y))
 
-        return_button.event(event)
-        pygame.mouse.set_visible(False)
-        pygame.display.flip()
-        clock.tick(FPS)
+            return_button.event(event)
+            pygame.mouse.set_visible(False)
+            pygame.display.flip()
+            clock.tick(FPS)
 
     pygame.quit()
 
