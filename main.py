@@ -157,12 +157,13 @@ class ReturnButton(Button):
         super().__init__(x, y, width, height, text)
 
     def event(self, event):
+        global showsettings
         super().event(event)
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 self.sound.play()
-                print('c')
+                showsettings = False
                 main_menu()
 
 
