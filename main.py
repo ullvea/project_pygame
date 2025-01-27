@@ -119,6 +119,7 @@ class ReturnButton(Button):
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 self.sound.play()
+                print('c')
                 main_menu()
 
 

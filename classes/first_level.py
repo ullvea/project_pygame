@@ -12,6 +12,7 @@ class FirstLevel:
         self.confines_sprites = pygame.sprite.Group()  # группа спрайтов, отвечающая за ограничение камеры
         self.waddle_doo_sprites = pygame.sprite.Group()
         self.tmx(tmx_map)
+        self.pause_button = PauseButton((650, 0), 'pause_btn.png', 'pause_btn_hovered.png', scale= 0.5)
 
     def run(self):
         camera.update(self.kirby)
@@ -22,6 +23,7 @@ class FirstLevel:
         screen.fill((60, 188, 252))
         all_sprites.draw(self.surface)
         objects_sprites.draw(self.surface)
+        self.pause_button.draw()
 
     def surfx2(self, surf):
         """Функция, увеличивающая размер тайла"""
@@ -60,3 +62,9 @@ class FirstLevel:
                                             self.kirby)
             if obj.name == 'fly':
                  Fly((obj.x * 2, obj.y * 2), (all_sprites, damage_sprites), self.obstacle_sprites, self.kirby)
+
+
+class PauseButton(ImageButton):
+    def __init__(self, pos, image, hovered_image, scale):
+        super().__init__(pos, image, hovered_image, scale)
+        pass

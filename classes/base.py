@@ -93,11 +93,11 @@ class Button:
 
 
 class ImageButton:
-    def __init__(self,  pos, image, hovered_image):
-        self.normal_image = load_image(image, [], 1)
+    def __init__(self,  pos, image, hovered_image, scale=1):
+        self.normal_image = load_image(image, [], scale)
         self.image = self.normal_image
         self.rect = self.image.get_rect(topleft=pos)
-        self.hovered_image = load_image(hovered_image, [], 1)
+        self.hovered_image = load_image(hovered_image, [], scale)
         self.hovered = False
 
     def draw(self):
