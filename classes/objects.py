@@ -17,5 +17,5 @@ class Hearts(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.animation.image, (100, 30))
             self.flag = False
             if self.animation.image == self.animation.frames[4]:
-                pause_time = 1000000
-                pygame.time.wait(pause_time)
+                pass
+                # экран проигрыша
