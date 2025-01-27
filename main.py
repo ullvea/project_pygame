@@ -241,7 +241,8 @@ def main_menu():
     text_surface2 = font.render("SOUND:", True, pygame.Color('black'))
     text_rect2 = text_surface2.get_rect()
     text_rect2.center = (210, 350)
-    sound_btn = ImageButton((370, 320),'sound_play.png', 'sound_play_hovered.png' )
+    sound_btn = ImageButton((370, 320),'sound_play.png', 'sound_play_hovered.png')
+    exit_settings = ReturnButton(WIDTH // 2 - 120, 420, 240, 50, "EXIT SETTINGS")
 
 
 
@@ -266,6 +267,9 @@ def main_menu():
             if showsettings:
                 screen.blit(screen_im, (100, 220))
                 sound_btn.draw()
+                sound_btn.event(event)
+                exit_settings.draw(screen)
+                exit_settings.event(event)
                 screen.blit(text_surface, text_rect)
                 screen.blit(text_surface1, text_rect1)
                 screen.blit(text_surface2, text_rect2)

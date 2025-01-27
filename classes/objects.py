@@ -10,6 +10,7 @@ class Hearts(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (100, 30))
         self.rect = self.image.get_rect()
         self.flag = False
+        self.stop_game_defeat = None
 
     def update(self):
         if self.flag:
@@ -17,5 +18,8 @@ class Hearts(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.animation.image, (100, 30))
             self.flag = False
             if self.animation.image == self.animation.frames[4]:
-                pause_time = 1000000
-                pygame.time.wait(pause_time)
+                self.stop_game_defeat = True
+                # экран проигрыша
+
+    def update_game(self):
+         return self.stop_game_defeat
