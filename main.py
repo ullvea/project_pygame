@@ -148,6 +148,9 @@ def rule():
     jump = load_image('Kirby_jump.png')
     jump = pygame.transform.scale(jump, (50, 50))
 
+    eat = load_image('Kirby_start_eating.png')
+    eat = pygame.transform.scale(eat, (80, 50))
+
     return_button = ReturnButton(10, 10, 100, 50, "MENU")
 
     while running:
@@ -161,8 +164,9 @@ def rule():
 
         screen.blit(text_surface, text_rect)
         screen.blit(up, (250, 200))
-        screen.blit(move, (400, 300))
+        screen.blit(move, (360, 300))
         screen.blit(jump, (300, 200))
+        screen.blit(eat, (300, 430))
         if pygame.mouse.get_focused():
             x, y = pygame.mouse.get_pos()
             # изображение курсора
