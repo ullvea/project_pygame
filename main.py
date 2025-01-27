@@ -17,12 +17,44 @@ class Map:
         self.current_level.run()
 
 
+class PauseButton(ImageButton):
+    def __init__(self, pos, image, hovered_image, scale):
+        super().__init__(pos, image, hovered_image, scale)
+
+    def event(self, event):
+        global stop_game
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                self.sound.play()
+                stop_game = True
+
+
+class PauseStopButton(ImageButton):
+    def __init__(self, pos, image, hovered_image, scale):
+        super().__init__(pos, image, hovered_image, scale)
+
+    def event(self, event):
+        global stop_game
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                self.sound.play()
+                stop_game = False
+
+
 def main():
     pygame.init()
     pygame.display.set_caption('Kirby\'s Adventure')
     image = load_image("logo.webp")
     image_cur = load_image("yellow_cursor2.png")
     pygame.display.set_icon(image)
+
+    pause_button = PauseButton((650, 0), 'pause_btn.png', 'pause_btn_hovered.png', scale=0.5)
+    pause_stop_button = PauseStopButton((650, 0), 'pause_stop_btn.png',
+                                         'pause_stop_btn_hovered.png', scale=0.5)
 
     clock = pygame.time.Clock()
     running = True
@@ -32,8 +64,16 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
+            if not stop_game:
+                pause_button.event(event)
+            else:
+                pause_stop_button.event(event)
         game_map.run()
+        if not stop_game:
+            pause_button.draw()
+        else:
+            pause_stop_button.draw()
+
         if pygame.mouse.get_focused():
             x, y = pygame.mouse.get_pos()
             # изображение курсора

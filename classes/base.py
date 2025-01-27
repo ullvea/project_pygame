@@ -8,6 +8,8 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 25
 TILE_SIZE = 32
 
+stop_game = False
+
 
 class Sprite(pygame.sprite.Sprite):
     '''класс, отвечающий за отрисовку спрайтов на уровне для удобства разработчика'''
@@ -99,6 +101,7 @@ class ImageButton:
         self.rect = self.image.get_rect(topleft=pos)
         self.hovered_image = load_image(hovered_image, [], scale)
         self.hovered = False
+        self.sound = pygame.mixer.Sound('sound\\btn_click.mp3')
 
     def draw(self):
         # Изменение цвета при наведении курсора
