@@ -3,6 +3,7 @@ import sys
 import pygame.mixer
 from classes.base import *
 from classes.first_level import FirstLevel
+from classes.objects import *
 
 showsettings = False
 
@@ -46,6 +47,7 @@ class PauseStopButton(ImageButton):
 
 
 def main():
+    global stop_game
     pygame.init()
     pygame.display.set_caption('Kirby\'s Adventure')
     image = load_image("logo.webp")
@@ -68,7 +70,8 @@ def main():
                 pause_button.event(event)
             else:
                 pause_stop_button.event(event)
-
+        stop_game_defeat = game_map.current_level.kirby.hearts.update_game()
+        stop_game = stop_game_defeat if stop_game_defeat else stop_game
         game_map.run(stop_game)
         if not stop_game:
             pause_button.draw()
@@ -303,8 +306,6 @@ def main_menu():
                 screen.blit(image, (x, y))
 
             pygame.mouse.set_visible(False)
-
-
         pygame.display.flip()
     pygame.quit()
 
