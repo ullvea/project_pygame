@@ -169,6 +169,7 @@ def rule():
     image = load_image("logo.webp")
     image_cur = load_image("yellow_cursor2.png")
     pygame.display.set_icon(image)
+
     back_ground = load_image("clouds_rules.jpg")
     back_ground = pygame.transform.scale(back_ground, (700, 525))
 
@@ -179,23 +180,6 @@ def rule():
 
     clock = pygame.time.Clock()
     running = True
-
-    up = load_image('arrows.png')
-    up = pygame.transform.scale(up, (600, 400))
-
-    move = load_image('moving_animation.png')
-    move = pygame.transform.scale(move, (200, 50))
-
-    jump = load_image('Kirby_jump.png')
-    jump = pygame.transform.scale(jump, (50, 50))
-
-    eat = load_image('Kirby_start_eating.png')
-    eat = pygame.transform.scale(eat, (80, 50))
-
-    font = pygame.font.SysFont('comicsansms', 20)
-    text_jump = font.render('1) Чтобы Кирби полетела нужно зажать стрелочку вверх',
-                            True, pygame.Color('purple'))
-    rect_jump = text_jump.get_rect(center=(400, 180))
 
     return_button = ReturnButton(10, 10, 100, 50, "MENU")
 
@@ -209,11 +193,7 @@ def rule():
             return_button.draw(screen)
 
             screen.blit(text_surface, text_rect)
-            screen.blit(text_jump, rect_jump)
-            screen.blit(up, (250, 200))
-            screen.blit(move, (360, 300))
-            screen.blit(jump, (300, 200))
-            screen.blit(eat, (300, 430))
+
             if pygame.mouse.get_focused():
                 x, y = pygame.mouse.get_pos()
                 # изображение курсора
