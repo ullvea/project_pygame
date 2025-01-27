@@ -118,7 +118,6 @@ class ReturnButton(Button):
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 self.sound.play()
-                print('c')
                 main_menu()
 
 
@@ -158,24 +157,24 @@ def rule():
             if event.type == pygame.QUIT:
                 running = False
 
-        screen.blit(back_ground, (0, 0))
+            screen.blit(back_ground, (0, 0))
 
-        return_button.draw(screen)
+            return_button.draw(screen)
 
-        screen.blit(text_surface, text_rect)
-        screen.blit(up, (250, 200))
-        screen.blit(move, (360, 300))
-        screen.blit(jump, (300, 200))
-        screen.blit(eat, (300, 430))
-        if pygame.mouse.get_focused():
-            x, y = pygame.mouse.get_pos()
-            # изображение курсора
-            screen.blit(image_cur, (x, y))
+            screen.blit(text_surface, text_rect)
+            screen.blit(up, (250, 200))
+            screen.blit(move, (360, 300))
+            screen.blit(jump, (300, 200))
+            screen.blit(eat, (300, 430))
+            if pygame.mouse.get_focused():
+                x, y = pygame.mouse.get_pos()
+                # изображение курсора
+                screen.blit(image_cur, (x, y))
 
-        return_button.event(event)
-        pygame.mouse.set_visible(False)
-        pygame.display.flip()
-        clock.tick(FPS)
+            return_button.event(event)
+            pygame.mouse.set_visible(False)
+            pygame.display.flip()
+            clock.tick(FPS)
 
     pygame.quit()
 
