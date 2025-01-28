@@ -122,7 +122,7 @@ def main():
 
     return_button = ReturnButton(100, 400, 100, 50, "MENU")
 
-
+    again = AgainButton(500, 400, 100, 50, "AGAIN")
 
     image_finish = load_image("idiot.jpg")
     image_finish = pygame.transform.scale(image_finish, (700, 525))
@@ -146,9 +146,15 @@ def main():
         game_map.run(stop_game or stop_game_defeat)
         if stop_game or stop_game_defeat:
             screen.blit(image_finish, (0, 0))
+
             return_button.draw(screen)
             return_button.event(event)
+
+            again.draw(screen)
+            again.event(event)
+
             screen.blit(fail_kirbi, (400, 100))
+
             pause_button.draw()
         else:
             pause_stop_button.draw()
@@ -235,8 +241,22 @@ class ReturnButton(Button):
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 self.sound.play()
-                showsettings = False
                 main_menu()
+
+
+class AgainButton(Button):
+    def __init__(self, x, y, width, height, text):
+        super().__init__(x, y, width, height, text)
+
+    def event(self, event):
+        global showsettings
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                self.sound.play()
+                showsettings = False
+                main()
 
 
 def rule():
