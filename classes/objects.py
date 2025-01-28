@@ -10,7 +10,7 @@ class Hearts(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (100, 30))
         self.rect = self.image.get_rect()
         self.flag = False
-        self.stop_game_defeat = None
+        self.stop_game_defeat = False
 
     def update(self):
         if self.flag:

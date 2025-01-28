@@ -11,7 +11,8 @@ showsettings = False
 class Map:
     def __init__(self):
         self.tmx_map = {0: load_pygame('tmx_files\\map_vegetable_vallue.tmx'),
-                        1: load_pygame('tmx_files\\lvl2.tmx')}
+                        1: load_pygame('tmx_files\\lvl2.tmx'),
+                        2: load_pygame('tmx_files\\lvl3.tmx')}
         self.key = 0
         self.current_level = FirstLevel(self.tmx_map[self.key])
 
@@ -132,9 +133,10 @@ def main():
             else:
                 pause_stop_button.event(event)
         stop_game_defeat = game_map.current_level.kirby.hearts.update_game()
-        stop_game = stop_game_defeat if stop_game_defeat else stop_game
-        game_map.run(stop_game)
-        if not stop_game:
+        game_map.run(stop_game or stop_game_defeat)
+        if not (stop_game or stop_game_defeat):
+            pass
+            # проигрыш
             pause_button.draw()
         else:
             pause_stop_button.draw()

@@ -4,6 +4,7 @@
         "width": 2
     },
     "activeFile": "map_vegetable_vallue.tmx",
+    "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
     ],
@@ -13,6 +14,9 @@
         },
         "#lvl1_RoomB": {
             "scaleInDock": 1.5
+        },
+        "#lvl3": {
+            "scaleInDock": 1
         },
         "Kirby_character.tsx": {
             "scaleInDock": 1,
@@ -48,12 +52,23 @@
         "lvl2.tmx#tree": {
             "scaleInDock": 1
         },
+        "lvl3.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 154.66666666666663,
+                "y": -0.3333333333333428
+            }
+        },
+        "lvl3.tmx#lvl3": {
+            "scaleInDock": 1
+        },
         "map_vegetable_vallue.tmx": {
-            "scale": 4,
+            "scale": 1.5,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 916.5,
-                "y": 99.875
+                "x": 965.3333333333333,
+                "y": 143
             }
         },
         "map_vegetable_vallue.tmx#Fly": {
