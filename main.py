@@ -117,6 +117,16 @@ def main():
     image_cur = load_image("yellow_cursor2.png")
     pygame.display.set_icon(image)
 
+    fail_kirbi = load_image('sad_kirbi.png')
+    fail_kirbi = pygame.transform.scale(fail_kirbi, (170, 150))
+
+    return_button = ReturnButton(100, 400, 100, 50, "MENU")
+
+
+
+    image_finish = load_image("idiot.jpg")
+    image_finish = pygame.transform.scale(image_finish, (700, 525))
+
     pause_button = PauseButton((650, 0), 'pause_btn.png', 'pause_btn_hovered.png', scale=0.5)
     pause_stop_button = PauseStopButton((650, 0), 'pause_stop_btn.png',
                                         'pause_stop_btn_hovered.png', scale=0.5)
@@ -134,9 +144,11 @@ def main():
                 pause_stop_button.event(event)
         stop_game_defeat = game_map.current_level.kirby.hearts.update_game()
         game_map.run(stop_game or stop_game_defeat)
-        if not (stop_game or stop_game_defeat):
-            pass
-            # проигрыш
+        if stop_game or stop_game_defeat:
+            screen.blit(image_finish, (0, 0))
+            return_button.draw(screen)
+            return_button.event(event)
+            screen.blit(fail_kirbi, (400, 100))
             pause_button.draw()
         else:
             pause_stop_button.draw()
