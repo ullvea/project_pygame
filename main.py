@@ -1,9 +1,9 @@
 import sys
 
-import pygame.mixer
 from classes.base import *
 from classes.first_level import FirstLevel
 from classes.objects import *
+import pygame.mixer
 
 showsettings = False
 
@@ -267,10 +267,43 @@ def rule():
     pygame.quit()
 
 
+
+class SoundButton(ImageButton):
+    def __init__(self, pos, image, hovered_image, scale):
+        super().__init__(pos, image, hovered_image, scale)
+
+    def event(self, event):
+        global stop_sound
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                self.sound.play()
+                stop_sound = True
+                menu_sound.stop()
+
+
+class SoundStopButton(ImageButton):
+    def __init__(self, pos, image, hovered_image, scale):
+        super().__init__(pos, image, hovered_image, scale)
+
+    def event(self, event):
+        global stop_sound
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                self.sound.play()
+                stop_sound = False
+                menu_sound.play(-1)
+
+
+
+
 def main_menu():
     global showsettings
     pygame.init()
-    menu_sound = pygame.mixer.Sound('sound\\menu_sound.mp3')
+    menu_sound.stop()
     menu_sound.play(-1)
     # print(pygame.font.get_fonts()) системные шрифты
     pygame.display.set_caption("Menu")
@@ -296,7 +329,9 @@ def main_menu():
     text_surface2 = font.render("SOUND:", True, pygame.Color('black'))
     text_rect2 = text_surface2.get_rect()
     text_rect2.center = (210, 350)
-    sound_btn = ImageButton((370, 320), 'sound_play.png', 'sound_play_hovered.png')
+    sound_btn = SoundButton((370, 320), 'sound_play.png', 'sound_play_hovered.png', scale=1)
+    sound_not_btn = SoundStopButton((370, 320), 'sound_not_play.png', 'sound_not_play_hovered.png',
+                                    scale=1)
     exit_settings = ReturnButton(WIDTH // 2 - 120, 420, 240, 50, "EXIT SETTINGS")
 
     image = load_image("yellow_cursor2.png")
@@ -319,8 +354,12 @@ def main_menu():
             screen.blit(title, (WIDTH // 2 - 200, 20))
             if showsettings:
                 screen.blit(screen_im, (100, 220))
-                sound_btn.draw()
-                sound_btn.event(event)
+                if not stop_sound:
+                    sound_btn.draw()
+                    sound_btn.event(event)
+                else:
+                    sound_not_btn.draw()
+                    sound_not_btn.event(event)
                 exit_settings.draw(screen)
                 exit_settings.event(event)
                 screen.blit(text_surface, text_rect)
@@ -336,6 +375,9 @@ def main_menu():
                 play_button.event(event)
                 exit_button.event(event)
                 settings_button.event(event)
+
+            if stop_sound:
+                menu_sound.stop()
 
             if pygame.mouse.get_focused():
                 x, y = pygame.mouse.get_pos()
