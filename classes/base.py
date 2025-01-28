@@ -1,5 +1,6 @@
 import os
 import pygame
+import pygame.mixer
 import sys
 from pytmx import *
 
@@ -9,6 +10,9 @@ FPS = 25
 TILE_SIZE = 32
 
 stop_game = False
+stop_sound = False
+pygame.init()
+menu_sound = pygame.mixer.Sound('sound\\menu_sound.mp3')
 clock = pygame.time.Clock()
 
 
