@@ -25,8 +25,144 @@ class Map:
             self.current_level = FirstLevel(self.tmx_map[self.key])
 
 
+class PlayButton(Button):
+    def __init__(self, x, y, width, height, text):
+        super().__init__(x, y, width, height, text)
+
+    def event(self, event):
+        super().event(event)
+
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                main()
+
+
+class SettingsButton(Button):
+    def __init__(self, x, y, width, height, text):
+        super().__init__(x, y, width, height, text)
+
+    def event(self, event):
+        global showsettings
+        super().event(event)
+
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                showsettings = True
+                # screen.blit(self.screen_im, (100, 120))
+
+
+class ExitButton(Button):
+    def __init__(self, x, y, width, height, text):
+        super().__init__(x, y, width, height, text)
+
+    def event(self, event):
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                pygame.time.delay(300)
+                pygame.quit()
+                sys.exit()
+
+
+class RulesButton(Button):
+    def __init__(self, x, y, width, height, text):
+        super().__init__(x, y, width, height, text)
+
+    def event(self, event):
+        super().event(event)
+
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                rule()
+
+
+class ReturnButton(Button):
+    def __init__(self, x, y, width, height, text):
+        super().__init__(x, y, width, height, text)
+
+    def event(self, event):
+        global showsettings
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                showsettings = False
+                main_menu()
+
+
+class AgainButton(Button):
+    def __init__(self, x, y, width, height, text):
+        super().__init__(x, y, width, height, text)
+
+    def event(self, event):
+        global showsettings
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                showsettings = False
+                main()
+
+
+class PauseButton(ImageButton):
+    def __init__(self, pos, image, hovered_image, scale):
+        super().__init__(pos, image, hovered_image, scale)
+
+    def event(self, event):
+        global stop_game
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                stop_game = True
+
+
+class PauseStopButton(ImageButton):
+    def __init__(self, pos, image, hovered_image, scale):
+        super().__init__(pos, image, hovered_image, scale)
+
+    def event(self, event):
+        global stop_game
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                stop_game = False
+
+
+class SoundButton(ImageButton):
+    def __init__(self, pos, image, hovered_image, scale):
+        super().__init__(pos, image, hovered_image, scale)
+
+    def event(self, event):
+        global stop_sound
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                stop_sound = True
+                menu_sound.stop()
+
+
+class SoundStopButton(ImageButton):
+    def __init__(self, pos, image, hovered_image, scale):
+        super().__init__(pos, image, hovered_image, scale)
+
+    def event(self, event):
+        global stop_sound
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                stop_sound = False
+                menu_sound.play(-1)
+
+
 def loading():
-    pygame.init()
     pygame.display.set_caption('Kirby\'s Adventure')
     image = load_image("logo.webp")
     image_cur = load_image("yellow_cursor2.png")
@@ -81,41 +217,14 @@ def loading():
         clock.tick(FPS)
 
 
-class PauseButton(ImageButton):
-    def __init__(self, pos, image, hovered_image, scale):
-        super().__init__(pos, image, hovered_image, scale)
-
-    def event(self, event):
-        global stop_game
-        super().event(event)
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Проверка нажатия кнопки мыши
-            if self.hovered:
-                self.sound.play()
-                stop_game = True
-
-
-class PauseStopButton(ImageButton):
-    def __init__(self, pos, image, hovered_image, scale):
-        super().__init__(pos, image, hovered_image, scale)
-
-    def event(self, event):
-        global stop_game
-        super().event(event)
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Проверка нажатия кнопки мыши
-            if self.hovered:
-                self.sound.play()
-                stop_game = False
-
-
 def main():
     global stop_game
-    pygame.init()
     pygame.display.set_caption('Kirby\'s Adventure')
     image = load_image("logo.webp")
     image_cur = load_image("yellow_cursor2.png")
     pygame.display.set_icon(image)
+
+    game_map = Map()
 
     fail_kirbi = load_image('sad_kirbi.png')
     fail_kirbi = pygame.transform.scale(fail_kirbi, (170, 150))
@@ -132,7 +241,6 @@ def main():
                                         'pause_stop_btn_hovered.png', scale=0.5)
 
     running = True
-    game_map = Map()
 
     while running:
         for event in pygame.event.get():
@@ -144,6 +252,7 @@ def main():
                 pause_stop_button.event(event)
         stop_game_defeat = game_map.current_level.kirby.hearts.update_game()
         game_map.run(stop_game or stop_game_defeat)
+        draw_score()
         if stop_game or stop_game_defeat:
             screen.blit(image_finish, (0, 0))
 
@@ -171,96 +280,7 @@ def main():
     pygame.quit()
 
 
-class PlayButton(Button):
-    def __init__(self, x, y, width, height, text):
-        super().__init__(x, y, width, height, text)
-
-    def event(self, event):
-        super().event(event)
-
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Проверка нажатия кнопки мыши
-            if self.hovered:
-                self.sound.play()
-                main()
-
-
-class SettingsButton(Button):
-    def __init__(self, x, y, width, height, text):
-        super().__init__(x, y, width, height, text)
-
-    def event(self, event):
-        global showsettings
-        super().event(event)
-
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Проверка нажатия кнопки мыши
-            if self.hovered:
-                self.sound.play()
-                showsettings = True
-                # screen.blit(self.screen_im, (100, 120))
-
-
-class ExitButton(Button):
-    def __init__(self, x, y, width, height, text):
-        super().__init__(x, y, width, height, text)
-
-    def event(self, event):
-        super().event(event)
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Проверка нажатия кнопки мыши
-            if self.hovered:
-                self.sound.play()
-                pygame.time.delay(300)
-                pygame.quit()
-                sys.exit()
-
-
-class RulesButton(Button):
-    def __init__(self, x, y, width, height, text):
-        super().__init__(x, y, width, height, text)
-
-    def event(self, event):
-        super().event(event)
-
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Проверка нажатия кнопки мыши
-            if self.hovered:
-                self.sound.play()
-                rule()
-
-
-class ReturnButton(Button):
-    def __init__(self, x, y, width, height, text):
-        super().__init__(x, y, width, height, text)
-
-    def event(self, event):
-        global showsettings
-        super().event(event)
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Проверка нажатия кнопки мыши
-            if self.hovered:
-                self.sound.play()
-                main_menu()
-
-
-class AgainButton(Button):
-    def __init__(self, x, y, width, height, text):
-        super().__init__(x, y, width, height, text)
-
-    def event(self, event):
-        global showsettings
-        super().event(event)
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Проверка нажатия кнопки мыши
-            if self.hovered:
-                self.sound.play()
-                showsettings = False
-                main()
-
-
 def rule():
-    pygame.init()
     pygame.display.set_caption('Kirby\'s Adventure')
     image = load_image("logo.webp")
     image_cur = load_image("yellow_cursor2.png")
@@ -301,42 +321,8 @@ def rule():
     pygame.quit()
 
 
-
-class SoundButton(ImageButton):
-    def __init__(self, pos, image, hovered_image, scale):
-        super().__init__(pos, image, hovered_image, scale)
-
-    def event(self, event):
-        global stop_sound
-        super().event(event)
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Проверка нажатия кнопки мыши
-            if self.hovered:
-                self.sound.play()
-                stop_sound = True
-                menu_sound.stop()
-
-
-class SoundStopButton(ImageButton):
-    def __init__(self, pos, image, hovered_image, scale):
-        super().__init__(pos, image, hovered_image, scale)
-
-    def event(self, event):
-        global stop_sound
-        super().event(event)
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Проверка нажатия кнопки мыши
-            if self.hovered:
-                self.sound.play()
-                stop_sound = False
-                menu_sound.play(-1)
-
-
-
-
 def main_menu():
     global showsettings
-    pygame.init()
     menu_sound.stop()
     menu_sound.play(-1)
     # print(pygame.font.get_fonts()) системные шрифты
@@ -351,12 +337,15 @@ def main_menu():
     play_button = PlayButton(WIDTH // 2 - 75, 250, 150, 50, "PLAY")
     exit_button = ExitButton(WIDTH // 2 - 75, 440, 150, 50, "EXIT")
     rules_button = RulesButton(WIDTH // 2 - 75, 310, 150, 50, "RULES")
-
     settings_button = SettingsButton(WIDTH // 2 - 75, 370, 150, 50, "SETTINGS")
+    menu_btns = [play_button, exit_button, rules_button, settings_button]
+
+    result = str(cur.execute("""SELECT results FROM score""").fetchone()[0])
+
     font = pygame.font.Font('font.ttf', 30)
-    text_surface = font.render("MAX SCORE:", True, pygame.Color('black'))
+    text_surface = font.render(f"MAX SCORE: {result}", True, pygame.Color('black'))
     text_rect = text_surface.get_rect()
-    text_rect.center = (240, 270)
+    text_rect.center = (250, 270)
     text_surface1 = font.render("YOUR MAX LEVEL:", True, pygame.Color('black'))
     text_rect1 = text_surface1.get_rect()
     text_rect1.center = (275, 310)
@@ -401,14 +390,9 @@ def main_menu():
                 screen.blit(text_surface2, text_rect2)
 
             else:
-                play_button.draw(screen)
-                exit_button.draw(screen)
-                rules_button.draw(screen)
-                rules_button.event(event)
-                settings_button.draw(screen)
-                play_button.event(event)
-                exit_button.event(event)
-                settings_button.event(event)
+                for i in menu_btns:
+                    i.draw(screen)
+                    i.event(event)
 
             if stop_sound:
                 menu_sound.stop()

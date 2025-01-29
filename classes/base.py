@@ -2,7 +2,10 @@ import os
 import pygame
 import pygame.mixer
 import sys
+import sqlite3
 from pytmx import *
+
+pygame.init()
 
 size = WIDTH, HEIGHT = 700, 525
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -11,9 +14,18 @@ TILE_SIZE = 32
 
 stop_game = False
 stop_sound = False
-pygame.init()
+
+score = 0
+score_text = pygame.font.Font('font.ttf', 40)
+score_surface = score_text.render(str(score), True, pygame.Color('white'))
+score_rect = score_surface.get_rect(center=(20, 50))
+
 menu_sound = pygame.mixer.Sound('sound\\menu_sound.mp3')
+defeat_sound = pygame.mixer.Sound('sound\\game_over_sound.mp3')
 clock = pygame.time.Clock()
+
+con = sqlite3.connect('BD')
+cur = con.cursor()
 
 
 class Sprite(pygame.sprite.Sprite):
@@ -93,6 +105,10 @@ class Button:
         surface.blit(text_surface, text_rect)
 
     def event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                self.sound.play()
         if event.type == pygame.MOUSEMOTION:
             # Проверка на наведение курсора
             self.hovered = self.rect.collidepoint(event.pos)
@@ -120,6 +136,10 @@ class ImageButton:
         if event.type == pygame.MOUSEMOTION:
             # Проверка на наведение курсора
             self.hovered = self.rect.collidepoint(event.pos)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                self.sound.play()
 
 
 obstacles = pygame.sprite.Group()
@@ -142,6 +162,15 @@ def clear_groups():
     next_lvl_sprites.empty()
 
 camera = Camera()
+
+def update_score(new_score):
+    global score
+    score = new_score
+
+def draw_score():
+    score_surface = score_text.render(str(score), True, pygame.Color('white'))
+    screen.blit(score_surface, score_rect)
+
 
 
 def load_image(name, colorkeys=None, scale=2):

@@ -22,6 +22,7 @@ class Fly(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.image, True, False)
 
     def move(self):
+        global score, SCORE_FONT
         self.rect.x += self.speed
         if pygame.sprite.spritecollideany(self, self.obstacle_sprites):
             self.speed *= -1
@@ -29,8 +30,9 @@ class Fly(pygame.sprite.Sprite):
 
         if pygame.sprite.spritecollideany(self, kirby_sprites):
             self.player.hearts.flag = True
+            score -= 5
+            update_score(score)
             self.kill()
-
 
 
     def update(self):
@@ -72,6 +74,7 @@ class WaddleDoo(pygame.sprite.Sprite):
         self.shot = None
 
     def attack(self):
+        global score
         current_time = pygame.time.get_ticks()
         distance = math.sqrt((self.rect.centerx - self.player.rect.centerx) ** 2 +
                              (self.rect.centery - self.player.rect.centery) ** 2)
@@ -95,6 +98,8 @@ class WaddleDoo(pygame.sprite.Sprite):
         for item in sprite_shots_group:  # Выстрелы должны удалятся при столкновении с Кирби
             if pygame.sprite.spritecollideany(item, kirby_sprites):
                 self.player.hearts.flag = True
+                score -= 1
+                update_score(score)
                 item.kill()
 
     def move(self):
@@ -138,6 +143,7 @@ class WaddleDoo(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.image, True, False)
 
     def update(self):
+        global score
         self.move()
         self.attack()
         current_time = pygame.time.get_ticks()
@@ -153,6 +159,8 @@ class WaddleDoo(pygame.sprite.Sprite):
             new_width = int(self.image.get_width() * 0.7)
             new_height = int(self.image.get_height() * 0.7)
             if new_width == 0 or new_height == 0:
+                score += 15
+                update_score(score)
                 self.kill()
             self.image = pygame.transform.smoothscale(self.image, (new_width, new_height))
 
