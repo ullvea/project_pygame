@@ -64,3 +64,6 @@ class FirstLevel:
                                             self.kirby)
             if obj.name == 'fly':
                  Fly((obj.x * 2, obj.y * 2), (all_sprites, damage_sprites), self.obstacle_sprites, self.kirby)
+
+            if obj.name == 'mushroom':
+                 Mushroom((obj.x * 2, obj.y * 2), (all_sprites, damage_sprites), self.obstacle_sprites, self.kirby)

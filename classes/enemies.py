@@ -3,6 +3,20 @@ import pygame.transform
 from classes.base import *
 import math
 
+class Mushroom(pygame.sprite.Sprite):
+    def __init__(self, pos, groups, obstacle_sprites, player):
+        super().__init__(groups)
+        self.colorkeys = [(98, 130, 179), (116, 154, 212), (111, 147, 201), (84, 110, 140)]
+        self.image = load_image('Mushroom_Dude.png', self.colorkeys)
+        self.rect = self.image.get_rect(topleft=pos)
+        self.animation = AnimatedSprite(load_image('Fly_fly.png', self.colorkeys),
+                                        2, 1, 36, 16)
+        self.obstacle_sprites = obstacle_sprites
+        self.player = player
+        self.speed = -6
+        self.orientation = True
+
+
 class Fly(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites, player):
         super().__init__(groups)

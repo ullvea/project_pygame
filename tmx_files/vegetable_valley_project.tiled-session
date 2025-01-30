@@ -37,27 +37,33 @@
                 8
             ],
             "scale": 0.75,
-            "selectedLayer": 4,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 1134.6666666666665,
-                "y": 120.66666666666663
+                "x": 732,
+                "y": 116.66666666666663
             }
         },
         "lvl2.tmx#Fly": {
             "scaleInDock": 1
         },
+        "lvl2.tmx#Mushroom_Dude": {
+            "scaleInDock": 1
+        },
         "lvl2.tmx#lvl2": {
+            "scaleInDock": 1
+        },
+        "lvl2.tmx#lvl3": {
             "scaleInDock": 1
         },
         "lvl2.tmx#tree": {
             "scaleInDock": 1
         },
         "lvl3.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 4,
+            "scale": 0.75,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 154.66666666666663,
-                "y": -0.3333333333333428
+                "x": 925.3333333333333,
+                "y": 32.66666666666663
             }
         },
         "lvl3.tmx#lvl3": {
@@ -67,8 +73,8 @@
             "scale": 1.5,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 965.3333333333333,
-                "y": 143
+                "x": 964.6666666666665,
+                "y": 142.33333333333331
             }
         },
         "map_vegetable_vallue.tmx#Fly": {

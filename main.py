@@ -14,10 +14,7 @@ class Map:
                         1: load_pygame('tmx_files\\lvl2.tmx'),
                         2: load_pygame('tmx_files\\lvl3.tmx')}
         self.key = 0
-        self.current_level = FirstLevel(self.tmx_map[self.key])
-        # if not update_sound():
-        #     pygame.mixer.stop()
-        #     lvl1_sound.play(-1)
+        self.current_level = FirstLevel(self.tmx_map[1])
 
     def run(self, stop_game):
         self.current_level.run(stop_game)
@@ -31,7 +28,7 @@ class Map:
             if max_result < get_score():
                 cur.execute(f"""UPDATE score SET max_results = {get_score()}""")
             con.commit()  # Cохраняем изменения в БД
-            update_score(0)  # При переходе на новый уровень сбрасываем счётчик
+            update_score(0)  # При переходе на новый уровень сбрасываем счётчик очков
             self.current_level = FirstLevel(self.tmx_map[self.key])
 
 
