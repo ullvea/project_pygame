@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "map_vegetable_vallue.tmx",
+    "activeFile": "lvl3.tmx",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -39,8 +39,8 @@
             "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 418.18181818181813,
-                "y": -59.09090909090901
+                "x": 630.3030303030304,
+                "y": 198.4848484848485
             }
         },
         "lvl2.tmx#Fly": {
@@ -60,11 +60,17 @@
         },
         "lvl3.tmx": {
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 1126,
-                "y": 242.33333333333331
+                "x": 586.6666666666666,
+                "y": 239.66666666666669
             }
+        },
+        "lvl3.tmx#Fly": {
+            "scaleInDock": 1
+        },
+        "lvl3.tmx#Mushroom_Dude1": {
+            "scaleInDock": 1
         },
         "lvl3.tmx#lvl3": {
             "scaleInDock": 1
@@ -73,8 +79,8 @@
             "scale": 1.5,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 964.6666666666665,
-                "y": 142.33333333333331
+                "x": 512,
+                "y": 128.33333333333331
             }
         },
         "map_vegetable_vallue.tmx#Fly": {
@@ -93,8 +99,8 @@
             "scale": 1,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 396,
-                "y": 238.5
+                "x": 512,
+                "y": 128.5
             }
         },
         "map_vegetable_vallue_2.tmx#lvl1_RoomB": {
@@ -111,16 +117,19 @@
     "openFiles": [
         "map_vegetable_vallue.tmx",
         "Vegetable_Valley_1_Room_A_tiles.tsx",
-        "Kirby_character.tsx"
+        "Kirby_character.tsx",
+        "lvl3.tmx",
+        "lvl2.tmx",
+        "map_vegetable_vallue_2.tmx"
     ],
     "project": "vegetable_valley_project.tiled-project",
     "recentFiles": [
         "lvl3.tmx",
-        "lvl2.tmx",
-        "map_vegetable_vallue_2.tmx",
-        "Kirby_character.tsx",
+        "map_vegetable_vallue.tmx",
         "Vegetable_Valley_1_Room_A_tiles.tsx",
-        "map_vegetable_vallue.tmx"
+        "Kirby_character.tsx",
+        "map_vegetable_vallue_2.tmx",
+        "lvl2.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.lastUsedFormat": "tsx",

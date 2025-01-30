@@ -9,19 +9,8 @@ class Mushroom(pygame.sprite.Sprite):
         self.colorkeys = [(98, 130, 179), (116, 154, 212), (111, 147, 201), (84, 110, 140)]
         self.image = load_image('Mushroom_Dude.png', self.colorkeys)
         self.rect = self.image.get_rect(topleft=pos)
-        self.animation = AnimatedSprite(load_image('Fly_fly.png', self.colorkeys),
-                                        2, 1, 36, 16)
-        self.obstacle_sprites = obstacle_sprites
-        self.player = player
-        self.speed = -6
-        self.orientation = True
 
     def update(self):
-        global score, SCORE_FONT
-        if pygame.sprite.spritecollideany(self, self.obstacle_sprites):
-            self.speed *= -1
-            self.orientation = not self.orientation
-
         if pygame.sprite.spritecollideany(self, kirby_sprites):
             self.player.hearts.flag = True
             score -= 5
@@ -48,7 +37,7 @@ class Fly(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.image, True, False)
 
     def move(self):
-        global score, SCORE_FONT
+        global score
         self.rect.x += self.speed
         if pygame.sprite.spritecollideany(self, self.obstacle_sprites):
             self.speed *= -1
