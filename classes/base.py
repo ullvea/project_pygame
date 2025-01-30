@@ -15,9 +15,11 @@ size = WIDTH, HEIGHT = 700, 525
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 25
 TILE_SIZE = 32
+clock = pygame.time.Clock()
 
 stop_game = False
 stop_sound = False
+showsettings = False
 
 score = 0
 score_text = pygame.font.Font('font.ttf', 40)
@@ -27,7 +29,6 @@ score_rect = score_surface.get_rect(center=(20, 50))
 menu_sound = pygame.mixer.Sound('sound\\menu_sound.mp3')
 defeat_sound = pygame.mixer.Sound('sound\\game_over_sound.mp3')
 lvl1_sound = pygame.mixer.Sound('sound\\1lvl_sound.mp3')
-clock = pygame.time.Clock()
 
 con = sqlite3.connect('BD')
 cur = con.cursor()
@@ -102,23 +103,23 @@ class Button:
         self.hovered = False
         self.sound = pygame.mixer.Sound('sound\\btn_click.mp3')
 
-    def draw(self, surface):
+    def draw(self):
         # Изменение цвета при наведении курсора
         if self.hovered:
-            pygame.draw.rect(surface, pygame.Color('pink'), self.rect)
+            pygame.draw.rect(screen, pygame.Color('pink'), self.rect)
         else:
-            pygame.draw.rect(surface, self.color, self.rect)
+            pygame.draw.rect(screen, self.color, self.rect)
 
         # заменить шрифт: comicsansms
         font = pygame.font.Font('font.ttf', 30)
         text_surface = font.render(self.text, True, pygame.Color('white'))
         text_rect = text_surface.get_rect(center=self.rect.center)
-        surface.blit(text_surface, text_rect)
+        screen.blit(text_surface, text_rect)
 
     def event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Проверка нажатия кнопки мыши
-            if self.hovered and not stop_sound:
+            if self.hovered and not get_state_sound():
                 self.sound.play()
         if event.type == pygame.MOUSEMOTION:
             # Проверка на наведение курсора
@@ -150,7 +151,7 @@ class ImageButton:
             self.hovered = self.rect.collidepoint(event.pos)
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Проверка нажатия кнопки мыши
-            if self.hovered and not stop_sound:
+            if self.hovered and not get_state_sound():
                 self.sound.play()
 
 
@@ -191,6 +192,14 @@ def get_score():  # Функция для получения счёта игро
 def draw_score():  # Функция для отрисовки счёта игрока
     score_surface = score_text.render(str(score), True, pygame.Color('white'))
     screen.blit(score_surface, score_rect)
+
+
+def update_sound(state_sound):  # Функция для проверки работы звука
+    global stop_sound
+    stop_sound = state_sound
+
+def get_state_sound():
+    return stop_sound
 
 
 def load_image(name, colorkeys=None, scale=2):
