@@ -12,6 +12,7 @@ class Mushroom(pygame.sprite.Sprite):
         self.player = player
 
     def update(self):
+        global score
         if pygame.sprite.spritecollideany(self, kirby_sprites):
             self.player.hearts.flag = True
             score -= 5
