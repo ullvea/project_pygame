@@ -9,6 +9,7 @@ class Mushroom(pygame.sprite.Sprite):
         self.colorkeys = [(98, 130, 179), (116, 154, 212), (111, 147, 201), (84, 110, 140)]
         self.image = load_image('Mushroom_Dude.png', self.colorkeys)
         self.rect = self.image.get_rect(topleft=pos)
+        self.player = player
 
     def update(self):
         if pygame.sprite.spritecollideany(self, kirby_sprites):
