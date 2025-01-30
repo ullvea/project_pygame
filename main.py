@@ -14,7 +14,7 @@ class Map:
                         1: load_pygame('tmx_files\\lvl2.tmx'),
                         2: load_pygame('tmx_files\\lvl3.tmx')}
         self.key = 0
-        self.current_level = FirstLevel(self.tmx_map[1])
+        self.current_level = FirstLevel(self.tmx_map[0])
 
     def run(self, stop_game):
         self.current_level.run(stop_game)

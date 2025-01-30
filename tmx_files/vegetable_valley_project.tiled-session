@@ -36,11 +36,11 @@
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 0.75,
-            "selectedLayer": 7,
+            "scale": 0.33,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 732,
-                "y": 116.66666666666663
+                "x": 418.18181818181813,
+                "y": -59.09090909090901
             }
         },
         "lvl2.tmx#Fly": {
@@ -59,11 +59,11 @@
             "scaleInDock": 1
         },
         "lvl3.tmx": {
-            "scale": 0.75,
-            "selectedLayer": 3,
+            "scale": 1.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 925.3333333333333,
-                "y": 32.66666666666663
+                "x": 1126,
+                "y": 242.33333333333331
             }
         },
         "lvl3.tmx#lvl3": {
@@ -93,8 +93,8 @@
             "scale": 1,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 398,
-                "y": 239.5
+                "x": 396,
+                "y": 238.5
             }
         },
         "map_vegetable_vallue_2.tmx#lvl1_RoomB": {
@@ -115,6 +115,7 @@
     ],
     "project": "vegetable_valley_project.tiled-project",
     "recentFiles": [
+        "lvl3.tmx",
         "lvl2.tmx",
         "map_vegetable_vallue_2.tmx",
         "Kirby_character.tsx",
