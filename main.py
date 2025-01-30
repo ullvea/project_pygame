@@ -14,7 +14,7 @@ class Map:
                         1: load_pygame('tmx_files\\lvl2.tmx'),
                         2: load_pygame('tmx_files\\lvl3.tmx')}
         self.key = 0
-        self.current_level = FirstLevel(self.tmx_map[2])
+        self.current_level = FirstLevel(self.tmx_map[1])
 
     def run(self, stop_game):
         self.current_level.run(stop_game)
@@ -327,43 +327,7 @@ def main():
     pygame.quit()
 
 
-def map():
-    image_cur = load_image("yellow_cursor2.png")
-    lvl1_map = pygame.image.load("data\\Objects_images\\map_background\\1lvl_map.png")
-    lvl2_map = pygame.image.load("data\\Objects_images\\map_background\\2lvl_map.png")
-    lvl3_map = pygame.image.load("data\\Objects_images\\map_background\\3lvl_map.png")
-    lvl4_map = pygame.image.load("data\\Objects_images\\map_background\\4lvl_map.png")
-    back_ground = pygame.transform.scale(lvl1_map, (700, 525))
 
-    font = pygame.font.Font('1stenterprises3D.ttf', 70)
-    text_surface = font.render('LEVEL MAP', True, pygame.Color('black'))
-    text_rect = text_surface.get_rect(center=(350, 100))
-
-    return_button = ReturnButton(10, 10, 100, 50, "MENU")
-
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-            screen.blit(back_ground, (0, 0))
-
-            return_button.draw()
-
-            screen.blit(text_surface, text_rect)
-
-            if pygame.mouse.get_focused():
-                x, y = pygame.mouse.get_pos()
-                # изображение курсора
-                screen.blit(image_cur, (x, y))
-
-            return_button.event(event)
-            pygame.mouse.set_visible(False)
-            pygame.display.flip()
-            clock.tick(FPS)
-
-    pygame.quit()
 
 
 def rule():
@@ -420,8 +384,7 @@ def main_menu():
     exit_button = ExitButton(WIDTH // 2 - 75, 440, 150, 50, "EXIT")
     rules_button = RulesButton(WIDTH // 2 - 75, 310, 150, 50, "RULES")
     settings_button = SettingsButton(WIDTH // 2 - 75, 370, 150, 50, "SETTINGS")
-    map_button = MapButton((400, 320), 'map_icon_earth.png', 'map_icon_earth_hovered.png', scale=0.25)
-    menu_btns = [play_button, exit_button, rules_button, settings_button, map_button]
+    menu_btns = [play_button, exit_button, rules_button, settings_button]
 
     max_result = str(cur.execute("""SELECT max_results FROM score""").fetchone()[0])
     last_result = str(cur.execute("""SELECT last_results FROM score""").fetchone()[0])
