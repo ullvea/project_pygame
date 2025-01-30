@@ -7,6 +7,10 @@ from pytmx import *
 
 pygame.init()
 
+pygame.display.set_caption('Kirby\'s Adventure')
+image = pygame.image.load("data\\logo.webp")
+pygame.display.set_icon(image)
+
 size = WIDTH, HEIGHT = 700, 525
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 25
@@ -22,6 +26,7 @@ score_rect = score_surface.get_rect(center=(20, 50))
 
 menu_sound = pygame.mixer.Sound('sound\\menu_sound.mp3')
 defeat_sound = pygame.mixer.Sound('sound\\game_over_sound.mp3')
+lvl1_sound = pygame.mixer.Sound('sound\\1lvl_sound.mp3')
 clock = pygame.time.Clock()
 
 con = sqlite3.connect('BD')
@@ -29,7 +34,8 @@ cur = con.cursor()
 
 
 class Sprite(pygame.sprite.Sprite):
-    '''класс, отвечающий за отрисовку спрайтов на уровне для удобства разработчика'''
+    '''Класс, отвечающий за отрисовку спрайтов на уровне для удобства разработчика'''
+
     def __init__(self, pos, surf, groups):
         super().__init__(groups)
         self.image = surf
@@ -40,6 +46,8 @@ class Sprite(pygame.sprite.Sprite):
 
 
 class Camera:
+    """Класс, отвечающий за камеру для отслеживания за игроком"""
+
     # зададим начальный сдвиг камеры
     def __init__(self, flag=True):
         self.dx = 0
@@ -59,6 +67,8 @@ class Camera:
 
 
 class AnimatedSprite(pygame.sprite.Sprite):
+    """Класс, отвечающий за анимацию спрайтов"""
+
     def __init__(self, sheet, columns, rows, x, y):
         super().__init__(animated_sprites)
         self.frames = []
@@ -81,9 +91,10 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.image = self.frames[self.cur_frame]
 
 
-
 # Класс кнопки
 class Button:
+    """Класс, отвечающий за создание базовой кнопки"""
+
     def __init__(self, x, y, width, height, text):
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
@@ -107,16 +118,17 @@ class Button:
     def event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Проверка нажатия кнопки мыши
-            if self.hovered:
+            if self.hovered and not stop_sound:
                 self.sound.play()
         if event.type == pygame.MOUSEMOTION:
             # Проверка на наведение курсора
             self.hovered = self.rect.collidepoint(event.pos)
 
 
-
 class ImageButton:
-    def __init__(self,  pos, image, hovered_image, scale=1):
+    """Класс, отвечающий за создание базовой кнопки с картинками"""
+
+    def __init__(self, pos, image, hovered_image, scale=1):
         self.normal_image = load_image(image, [], scale)
         self.image = self.normal_image
         self.rect = self.image.get_rect(topleft=pos)
@@ -138,10 +150,11 @@ class ImageButton:
             self.hovered = self.rect.collidepoint(event.pos)
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Проверка нажатия кнопки мыши
-            if self.hovered:
+            if self.hovered and not stop_sound:
                 self.sound.play()
 
 
+# Создаем группы спрайтов
 obstacles = pygame.sprite.Group()
 animated_sprites = pygame.sprite.Group()
 sprite_shots_group = pygame.sprite.Group()
@@ -151,7 +164,8 @@ objects_sprites = pygame.sprite.Group()
 damage_sprites = pygame.sprite.Group()
 next_lvl_sprites = pygame.sprite.Group()
 
-def clear_groups():
+
+def clear_groups():  # Функция для очистки всех групп спрайтов
     obstacles.empty()
     animated_sprites.empty()
     sprite_shots_group.empty()
@@ -161,16 +175,22 @@ def clear_groups():
     damage_sprites.empty()
     next_lvl_sprites.empty()
 
-camera = Camera()
 
-def update_score(new_score):
+camera = Camera()  # Создаем экземпляр класса Камеры
+
+
+def update_score(new_score):  # Функция для обновления счёта игрока
     global score
     score = new_score
 
-def draw_score():
+
+def get_score():  # Функция для получения счёта игрока
+    return score
+
+
+def draw_score():  # Функция для отрисовки счёта игрока
     score_surface = score_text.render(str(score), True, pygame.Color('white'))
     screen.blit(score_surface, score_rect)
-
 
 
 def load_image(name, colorkeys=None, scale=2):

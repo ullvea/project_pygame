@@ -9,6 +9,7 @@ showsettings = False
 
 
 class Map:
+    """Класс, отвечающий за создание игры и переключение уровней"""
     def __init__(self):
         self.tmx_map = {0: load_pygame('tmx_files\\map_vegetable_vallue.tmx'),
                         1: load_pygame('tmx_files\\lvl2.tmx'),
@@ -22,10 +23,17 @@ class Map:
             loading()
             self.key += 1
             clear_groups()
+            cur.execute(f"""UPDATE score SET last_results = {get_score()}""")
+            max_result = cur.execute("""SELECT max_results FROM score""").fetchone()[0]
+            if max_result < get_score():
+                cur.execute(f"""UPDATE score SET max_results = {get_score()}""")
+            con.commit() # Cохраняем изменения в БД
+            update_score(0)  # При переходе на новый уровень сбрасываем счётчик
             self.current_level = FirstLevel(self.tmx_map[self.key])
 
 
 class PlayButton(Button):
+    """Класс, отвечающий за создание кнопки для начала игры"""
     def __init__(self, x, y, width, height, text):
         super().__init__(x, y, width, height, text)
 
@@ -39,6 +47,7 @@ class PlayButton(Button):
 
 
 class SettingsButton(Button):
+    """Класс, отвечающий за создание кнопки для настроек"""
     def __init__(self, x, y, width, height, text):
         super().__init__(x, y, width, height, text)
 
@@ -54,6 +63,7 @@ class SettingsButton(Button):
 
 
 class ExitButton(Button):
+    """Класс, отвечающий за создание кнопки для выхода из игры"""
     def __init__(self, x, y, width, height, text):
         super().__init__(x, y, width, height, text)
 
@@ -68,6 +78,7 @@ class ExitButton(Button):
 
 
 class RulesButton(Button):
+    """Класс, отвечающий за создание кнопки для показа правил"""
     def __init__(self, x, y, width, height, text):
         super().__init__(x, y, width, height, text)
 
@@ -163,10 +174,7 @@ class SoundStopButton(ImageButton):
 
 
 def loading():
-    pygame.display.set_caption('Kirby\'s Adventure')
-    image = load_image("logo.webp")
     image_cur = load_image("yellow_cursor2.png")
-    pygame.display.set_icon(image)
     running = True
 
     font = pygame.font.Font('font.ttf', 50)
@@ -180,9 +188,6 @@ def loading():
                     text_surface3, text_surface3, text_surface3, text_surface3,
                     text_surface4, text_surface4, text_surface4, text_surface4]
     cnt = 0
-    # os.listdir() в Python — это метод для получения списка всех файлов и каталогов в указанном каталоге
-    # Функция os.path.join() используется для объединения нескольких путей.
-    # Она учитывает особенности операционной системы и добавляет соответствующий разделитель между путями
 
     frames = []
     delay = 75
@@ -217,12 +222,12 @@ def loading():
         clock.tick(FPS)
 
 
+
 def main():
     global stop_game
-    pygame.display.set_caption('Kirby\'s Adventure')
-    image = load_image("logo.webp")
+    defeat_sound_play = False
+
     image_cur = load_image("yellow_cursor2.png")
-    pygame.display.set_icon(image)
 
     game_map = Map()
 
@@ -242,6 +247,7 @@ def main():
 
     running = True
 
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -253,7 +259,12 @@ def main():
         stop_game_defeat = game_map.current_level.kirby.hearts.update_game()
         game_map.run(stop_game or stop_game_defeat)
         draw_score()
-        if stop_game or stop_game_defeat:
+
+        if stop_game_defeat:
+            menu_sound.stop()
+            if not defeat_sound_play:
+                defeat_sound.play()
+                defeat_sound_play = True
             screen.blit(image_finish, (0, 0))
 
             return_button.draw(screen)
@@ -264,6 +275,7 @@ def main():
 
             screen.blit(fail_kirbi, (400, 100))
 
+        elif not stop_game:
             pause_button.draw()
         else:
             pause_stop_button.draw()
@@ -281,10 +293,7 @@ def main():
 
 
 def rule():
-    pygame.display.set_caption('Kirby\'s Adventure')
-    image = load_image("logo.webp")
     image_cur = load_image("yellow_cursor2.png")
-    pygame.display.set_icon(image)
 
     back_ground = load_image("clouds_rules.jpg")
     back_ground = pygame.transform.scale(back_ground, (700, 525))
@@ -326,7 +335,6 @@ def main_menu():
     menu_sound.stop()
     menu_sound.play(-1)
     # print(pygame.font.get_fonts()) системные шрифты
-    pygame.display.set_caption("Menu")
     back_ground = load_image("clouds.jpg")
 
     # изменяем размер картинки
@@ -340,18 +348,20 @@ def main_menu():
     settings_button = SettingsButton(WIDTH // 2 - 75, 370, 150, 50, "SETTINGS")
     menu_btns = [play_button, exit_button, rules_button, settings_button]
 
-    result = str(cur.execute("""SELECT results FROM score""").fetchone()[0])
+    max_result = str(cur.execute("""SELECT max_results FROM score""").fetchone()[0])
+    last_result = str(cur.execute("""SELECT last_results FROM score""").fetchone()[0])
 
     font = pygame.font.Font('font.ttf', 30)
-    text_surface = font.render(f"MAX SCORE: {result}", True, pygame.Color('black'))
+    text_surface = font.render(f"MAX SCORE: {max_result}", True, pygame.Color('black'))
     text_rect = text_surface.get_rect()
-    text_rect.center = (250, 270)
-    text_surface1 = font.render("YOUR MAX LEVEL:", True, pygame.Color('black'))
+    text_rect.center = (260, 270)
+    text_surface1 = font.render(f"YOUR LAST SCORE: {last_result}", True, pygame.Color('black'))
     text_rect1 = text_surface1.get_rect()
-    text_rect1.center = (275, 310)
+    text_rect1.center = (305, 310)
     text_surface2 = font.render("SOUND:", True, pygame.Color('black'))
     text_rect2 = text_surface2.get_rect()
     text_rect2.center = (210, 350)
+
     sound_btn = SoundButton((370, 320), 'sound_play.png', 'sound_play_hovered.png', scale=1)
     sound_not_btn = SoundStopButton((370, 320), 'sound_not_play.png', 'sound_not_play_hovered.png',
                                     scale=1)
@@ -383,6 +393,7 @@ def main_menu():
                 else:
                     sound_not_btn.draw()
                     sound_not_btn.event(event)
+
                 exit_settings.draw(screen)
                 exit_settings.event(event)
                 screen.blit(text_surface, text_rect)
