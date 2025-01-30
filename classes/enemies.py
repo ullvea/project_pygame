@@ -16,6 +16,18 @@ class Mushroom(pygame.sprite.Sprite):
         self.speed = -6
         self.orientation = True
 
+    def update(self):
+        global score, SCORE_FONT
+        if pygame.sprite.spritecollideany(self, self.obstacle_sprites):
+            self.speed *= -1
+            self.orientation = not self.orientation
+
+        if pygame.sprite.spritecollideany(self, kirby_sprites):
+            self.player.hearts.flag = True
+            score -= 5
+            update_score(score)
+            self.kill()
+
 
 class Fly(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites, player):

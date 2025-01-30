@@ -120,7 +120,7 @@ class AgainButton(Button):
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 showsettings = False
-                main()
+
 
 
 class PauseButton(ImageButton):
