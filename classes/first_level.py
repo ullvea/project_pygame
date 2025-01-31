@@ -66,4 +66,4 @@ class FirstLevel:
                  Fly((obj.x * 2, obj.y * 2), (all_sprites, damage_sprites), self.obstacle_sprites, self.kirby)
 
             if obj.name == 'mushroom':
-                 Mushroom((obj.x * 2, obj.y * 2), (all_sprites, damage_sprites), self.obstacle_sprites, self.kirby)
+                 Mushroom((obj.x * 2, obj.y * 2), (all_sprites, damage_sprites),  self.kirby)

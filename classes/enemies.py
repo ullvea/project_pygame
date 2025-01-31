@@ -3,8 +3,11 @@ import pygame.transform
 from classes.base import *
 import math
 
+
 class Mushroom(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, obstacle_sprites, player):
+    """Класс, отвечающий за создание врага Гриба, который просто стоит на месте при столкновении нанося урон"""
+
+    def __init__(self, pos, groups, player):
         super().__init__(groups)
         self.colorkeys = [(98, 130, 179), (116, 154, 212), (111, 147, 201), (84, 110, 140)]
         self.image = load_image('Mushroom_Dude.png', self.colorkeys)
@@ -15,12 +18,14 @@ class Mushroom(pygame.sprite.Sprite):
         global score
         if pygame.sprite.spritecollideany(self, kirby_sprites):
             self.player.hearts.flag = True
-            score -= 5
+            score -= 2
             update_score(score)
             self.kill()
 
 
 class Fly(pygame.sprite.Sprite):
+    """Класс, отвечающий за создание врага Мухи, которая летает по карте при столкновении нанося урон"""
+
     def __init__(self, pos, groups, obstacle_sprites, player):
         super().__init__(groups)
         self.colorkeys = [(98, 130, 179), (116, 154, 212), (111, 147, 201), (84, 110, 140)]
@@ -51,7 +56,6 @@ class Fly(pygame.sprite.Sprite):
             update_score(score)
             self.kill()
 
-
     def update(self):
         self.move()
         self.image = self.animation.image
@@ -59,8 +63,9 @@ class Fly(pygame.sprite.Sprite):
         self.mirror()
 
 
-
 class WaddleDoo(pygame.sprite.Sprite):
+    """Класс, отвечающий за создание врага Ваддле Доо, который бегает по карте и стреляет чередой из 3х выстрелов"""
+
     def __init__(self, pos, groups, waddle_doo_sprites, obstacle_sprites, player):
         super().__init__(groups)
         self.colorkeys = [(98, 130, 179), (116, 154, 212), (111, 147, 201), (84, 110, 140)]
@@ -68,7 +73,7 @@ class WaddleDoo(pygame.sprite.Sprite):
         self.attack_image = load_image('waddle_doo_attack.png', self.colorkeys)
         self.animation = AnimatedSprite(load_image('waddle_doo.png', self.colorkeys), 2, 1, 36, 16)
         self.animation_is_attacking = AnimatedSprite(load_image('waddle_doo_is_attacked.png', self.colorkeys),
-                                                    2, 1, 36, 16)
+                                                     2, 1, 36, 16)
         self.rect = self.image.get_rect(topleft=pos)
         self.last_rect = self.rect.copy()
         self.waddle_doo_sprites = waddle_doo_sprites
@@ -97,7 +102,7 @@ class WaddleDoo(pygame.sprite.Sprite):
                              (self.rect.centery - self.player.rect.centery) ** 2)
 
         if distance <= 220 and ((self.rect.x > self.player.rect.x and self.orientation) or
-        (self.rect.x < self.player.rect.x and not self.orientation)):  # Cоздание атаки
+                                (self.rect.x < self.player.rect.x and not self.orientation)):  # Cоздание атаки
             if current_time - self.animation_timer_for_shots > 2000:
                 self.attacking = True
                 for i in range(4, 1, -1):
@@ -110,7 +115,6 @@ class WaddleDoo(pygame.sprite.Sprite):
                     self.shot = Shot(load_image('waddle_doo_attack.png', self.colorkeys), x, y, speed,
                                      self.orientation)
                     self.animation_timer_for_shots = current_time
-
 
         for item in sprite_shots_group:  # Выстрелы должны удалятся при столкновении с Кирби
             if pygame.sprite.spritecollideany(item, kirby_sprites):
@@ -125,7 +129,7 @@ class WaddleDoo(pygame.sprite.Sprite):
                              (self.rect.centery - self.player.rect.centery) ** 2)
 
         if ((keys[pygame.K_DOWN] or keys[pygame.K_s]) and distance <= 50 and
-                not(self.rect.x < self.player.rect.x and self.orientation == self.player.orientation)):
+                not (self.rect.x < self.player.rect.x and self.orientation == self.player.orientation)):
             self.is_eaten = True
         if not self.is_eaten:
             self.rect.x += self.speed
@@ -145,6 +149,7 @@ class WaddleDoo(pygame.sprite.Sprite):
             self.check_collisions('y')
 
     def check_collisions(self, case):
+        """Функция для проверки столкновений с поверхностью"""
         for item in self.obstacle_sprites:
             if item.rect.colliderect(self.rect):
                 if case == 'y':
@@ -165,7 +170,7 @@ class WaddleDoo(pygame.sprite.Sprite):
         self.attack()
         current_time = pygame.time.get_ticks()
         self.last_rect = self.rect.copy()
-        if self.is_eaten:
+        if self.is_eaten:  # Если съеден, то стремительно уменьшается
             v_wd = pygame.math.Vector2(self.rect.center)
             v_kirby = pygame.math.Vector2(self.player.rect.center)
             s = v_kirby - v_wd
@@ -198,8 +203,9 @@ class WaddleDoo(pygame.sprite.Sprite):
                 self.mirror()
 
 
-
 class Shot(pygame.sprite.Sprite):
+    """Класс, отвечающий за создание Выстрела, который при столкновении наносит урон"""
+
     def __init__(self, image, x, y, speed, orientation):
         super().__init__(all_sprites, sprite_shots_group, damage_sprites)
         self.image = image
@@ -208,7 +214,7 @@ class Shot(pygame.sprite.Sprite):
         self.speed_y = speed[1]
         self.rect = self.image.get_rect(topleft=(x, y))
         self.current_time = pygame.time.get_ticks()
-        self.start_moving = True # Флаг, отвечающий за то, чтобы вначале выстрелы пролетали вперед, а затем начинали падать
+        self.start_moving = True  # Флаг, отвечающий за то, чтобы вначале выстрелы пролетали вперед, а затем начинали падать
 
     def update(self):
         now = pygame.time.get_ticks()

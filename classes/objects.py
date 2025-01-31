@@ -1,6 +1,8 @@
 from classes.base import *
 
 class Hearts(pygame.sprite.Sprite):
+    ''' Класс отвечает за жизни игрока '''
+
     def __init__(self):
         super().__init__(objects_sprites)
         self.colorkeys = []

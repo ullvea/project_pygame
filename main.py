@@ -14,7 +14,7 @@ class Map:
                         1: load_pygame('tmx_files\\lvl2.tmx'),
                         2: load_pygame('tmx_files\\lvl3.tmx')}
         self.key = 0
-        self.current_level = FirstLevel(self.tmx_map[1])
+        self.current_level = FirstLevel(self.tmx_map[0])
 
     def run(self, stop_game):
         self.current_level.run(stop_game)
@@ -96,6 +96,8 @@ class RulesButton(Button):
 
 
 class ReturnButton(Button):
+    """Класс, отвечающий за возвращение игрока в меню"""
+
     def __init__(self, x, y, width, height, text):
         super().__init__(x, y, width, height, text)
 
@@ -110,6 +112,8 @@ class ReturnButton(Button):
 
 
 class AgainButton(Button):
+    """Класс, отвечающий за создание кнопки для возможности вернутся игроку на начало уровня"""
+
     def __init__(self, x, y, width, height, text):
         super().__init__(x, y, width, height, text)
 
@@ -120,10 +124,12 @@ class AgainButton(Button):
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 showsettings = False
-
+                main()
 
 
 class PauseButton(ImageButton):
+    """Класс, отвечающий за создание кнопки для паузы при запущенной игре"""
+
     def __init__(self, pos, image, hovered_image, scale):
         super().__init__(pos, image, hovered_image, scale)
 
@@ -137,6 +143,8 @@ class PauseButton(ImageButton):
 
 
 class PauseStopButton(ImageButton):
+    """Класс, отвечающий за создание кнопки для паузы при остановленной игре"""
+
     def __init__(self, pos, image, hovered_image, scale):
         super().__init__(pos, image, hovered_image, scale)
 
@@ -150,6 +158,8 @@ class PauseStopButton(ImageButton):
 
 
 class SoundButton(ImageButton):
+    """Класс, отвечающий за создание кнопки для отключения звука"""
+
     def __init__(self, pos, image, hovered_image, scale):
         super().__init__(pos, image, hovered_image, scale)
 
@@ -164,6 +174,8 @@ class SoundButton(ImageButton):
 
 
 class SoundStopButton(ImageButton):
+    """Класс, отвечающий за создание кнопки для паузы включения звука"""
+
     def __init__(self, pos, image, hovered_image, scale):
         super().__init__(pos, image, hovered_image, scale)
 
@@ -177,6 +189,8 @@ class SoundStopButton(ImageButton):
 
 
 class MapButton(ImageButton):
+    """Класс, отвечающий за создание кнопки для показа карты уровней"""
+
     def __init__(self, pos, image, hovered_image, scale):
         super().__init__(pos, image, hovered_image, scale)
 
@@ -189,7 +203,7 @@ class MapButton(ImageButton):
                 map()
 
 
-def loading():
+def loading():  # Функция загрузки, используется при переходе с уровня на уровень
     image_cur = load_image("yellow_cursor2.png")
     running = True
 
@@ -203,11 +217,10 @@ def loading():
                     text_surface2, text_surface2, text_surface2, text_surface2,
                     text_surface3, text_surface3, text_surface3, text_surface3,
                     text_surface4, text_surface4, text_surface4, text_surface4]
-    cnt = 0
-
+    cnt = 0  # Индекс показываемой картинки
     frames = []
     delay = 75
-    for filename in os.listdir("loading"):
+    for filename in os.listdir("loading"):  # Загружаем картинки
         frame = pygame.image.load(os.path.join("loading", filename))
         frames.append(frame)
     image_ind = 0
@@ -229,6 +242,7 @@ def loading():
             last_delay = current
             image_ind += 1
         screen.blit(frames[image_ind % len(frames)], (130, 150))
+
         if pygame.mouse.get_focused():
             x, y = pygame.mouse.get_pos()
             # изображение курсора
@@ -250,7 +264,8 @@ def main():
     fail_kirbi = load_image('sad_kirbi.png')
     fail_kirbi = pygame.transform.scale(fail_kirbi, (170, 150))
 
-    gray_color = (128, 128, 128)
+    gray_color = (
+    128, 128, 128)  # Используем серый цвет, поверх игрового процесса для красивого процесса остановки игры
     mask_alpha = 200
 
     return_button = ReturnButton(100, 400, 100, 50, "MENU")
@@ -281,9 +296,9 @@ def main():
                 pause_stop_button.event(event)
         stop_game_defeat = game_map.current_level.kirby.hearts.update_game()
         game_map.run(stop_game or stop_game_defeat)
-        draw_score()
+        draw_score()  # Отрисовываем счёта
 
-        if stop_game_defeat:
+        if stop_game_defeat:  # Если игра остановленна в случае ПОРАЖЕНИЯ
             menu_sound.stop()
             if not defeat_sound_play:
                 defeat_sound.play()
@@ -296,9 +311,9 @@ def main():
 
             screen.blit(fail_kirbi, (400, 100))
 
-        elif not stop_game:
+        elif not stop_game:  # Если игра не остановленна
             pause_button.draw()
-        else:
+        else:  # Если игра остановленна в случае ПАУЗЫ
             mask_surf = pygame.Surface((WIDTH, HEIGHT))
             mask_surf.fill(gray_color)
             mask_surf.set_alpha(mask_alpha)
@@ -327,10 +342,7 @@ def main():
     pygame.quit()
 
 
-
-
-
-def rule():
+def rule():  # Функция для отображения правил
     image_cur = load_image("yellow_cursor2.png")
 
     back_ground = load_image("clouds_rules.jpg")
@@ -368,11 +380,10 @@ def rule():
     pygame.quit()
 
 
-def main_menu():
+def main_menu():  # Функция для отображения главного меню
     global showsettings
     menu_sound.stop()
     menu_sound.play(-1)
-    # print(pygame.font.get_fonts()) системные шрифты
     back_ground = load_image("clouds.jpg")
 
     # изменяем размер картинки
@@ -384,8 +395,9 @@ def main_menu():
     exit_button = ExitButton(WIDTH // 2 - 75, 440, 150, 50, "EXIT")
     rules_button = RulesButton(WIDTH // 2 - 75, 310, 150, 50, "RULES")
     settings_button = SettingsButton(WIDTH // 2 - 75, 370, 150, 50, "SETTINGS")
-    menu_btns = [play_button, exit_button, rules_button, settings_button]
+    menu_btns = [play_button, exit_button, rules_button, settings_button]  # Объединяем кнопки главного меню
 
+    # То, что будет показываться при открытии настроек
     max_result = str(cur.execute("""SELECT max_results FROM score""").fetchone()[0])
     last_result = str(cur.execute("""SELECT last_results FROM score""").fetchone()[0])
 

@@ -2,6 +2,8 @@ from classes.base import *
 from classes.objects import *
 
 class Kirby(pygame.sprite.Sprite):
+    """Класс, отвечающий за создание игрока"""
+
     def __init__(self, pos, groups, obstacle_sprites, confines_sprites, can_jump_sprites):
         super().__init__(groups)
         colorkeys = ((84, 110, 140), (86, 113, 145), (86, 113, 146), (98, 130, 179), (107, 142, 196), (108, 143, 194),
@@ -120,6 +122,8 @@ class Kirby(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.image, True, False)
 
     def move(self):
+        ''' Функция отвечает за перемещение игрока по карте '''
+
         keys = pygame.key.get_pressed()
         v1 = pygame.math.Vector2(0, 0)
         self.is_standing = False
@@ -179,6 +183,8 @@ class Kirby(pygame.sprite.Sprite):
 
 
     def check_collision(self, case):
+        """Функция для проверки столкновений с поверхностью"""
+
         for item in self.obstacle_sprites:
             if item.rect.colliderect(self.rect):
                 if case == 'x':
