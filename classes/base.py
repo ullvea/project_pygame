@@ -8,7 +8,9 @@ from pytmx import *
 pygame.init()
 
 pygame.display.set_caption('Kirby\'s Adventure')
-image = pygame.image.load("data\\logo.webp")
+image = pygame.image.load("data\\Objects_images\\logo.webp")
+image_cur = pygame.image.load("data\\Objects_images\\yellow_cursor2.png")
+image_cur = pygame.transform.scale(image_cur, (30, 30))
 pygame.display.set_icon(image)
 
 size = WIDTH, HEIGHT = 700, 525

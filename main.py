@@ -4,25 +4,25 @@ from classes.base import *
 from classes.first_level import FirstLevel
 from classes.objects import *
 import pygame.mixer
+key = 0
 
 
 class Map:
     """Класс, отвечающий за создание игры и переключение уровней"""
-
     def __init__(self):
+        global key
         self.tmx_map = {0: load_pygame('tmx_files\\map_vegetable_vallue.tmx'),
                         1: load_pygame('tmx_files\\lvl2.tmx'),
                         2: load_pygame('tmx_files\\lvl3.tmx')}
-        self.key = 0
-        self.current_level = FirstLevel(self.tmx_map[0])
+        self.current_level = FirstLevel(self.tmx_map[key])
 
     def run(self, stop_game):
-        global score
+        global score, key
         self.current_level.run(stop_game)
         if pygame.sprite.spritecollideany(self.current_level.kirby, next_lvl_sprites):
             loading()
-            if self.key + 1 < len(self.tmx_map):
-                self.key += 1
+            if key + 1 < len(self.tmx_map):
+                key += 1
             clear_groups()
             cur.execute(f"""UPDATE score SET last_results = {get_score()}""")
             max_result = cur.execute("""SELECT max_results FROM score""").fetchone()[0]
@@ -30,7 +30,7 @@ class Map:
                 cur.execute(f"""UPDATE score SET max_results = {get_score()}""")
             con.commit()  # Cохраняем изменения в БД
             update_score(0)  # При переходе на новый уровень сбрасываем счётчик очков
-            self.current_level = FirstLevel(self.tmx_map[self.key])
+            self.current_level = FirstLevel(self.tmx_map[key])
 
 
 class PlayButton(Button):
@@ -210,7 +210,6 @@ class MapButton(ImageButton):
 
 
 def loading():  # Функция загрузки, используется при переходе с уровня на уровень
-    image_cur = load_image("yellow_cursor2.png")
     running = True
 
     font = pygame.font.Font('data\\font\\font.ttf', 50)
@@ -262,7 +261,6 @@ def main():
     global stop_game
     defeat_sound_play = False
 
-    image_cur = load_image("yellow_cursor2.png")
     strip_image = pygame.image.load('data\\Objects_images\\strip.png')
     strip_image = pygame.transform.scale(strip_image, (700, 80))
     image_finish = load_image("idiot.jpg")
@@ -349,7 +347,6 @@ def main():
 
 
 def rule():  # Функция для отображения правил
-    image_cur = load_image("yellow_cursor2.png")
 
     back_ground = load_image("clouds_rules.jpg")
     back_ground = pygame.transform.scale(back_ground, (700, 525))
@@ -423,7 +420,6 @@ def main_menu():  # Функция для отображения главног�
                                     scale=1)
     exit_settings = ReturnButton(WIDTH // 2 - 120, 420, 240, 50, "EXIT SETTINGS")
 
-    image = load_image("yellow_cursor2.png")
     screen_im = load_image('settings_image.png', [], 2.6)
 
     title = load_image("kirbi.webp")
@@ -467,7 +463,7 @@ def main_menu():  # Функция для отображения главног�
             if pygame.mouse.get_focused():
                 x, y = pygame.mouse.get_pos()
                 # изображение курсора
-                screen.blit(image, (x, y))
+                screen.blit(image_cur, (x, y))
 
             pygame.mouse.set_visible(False)
         pygame.display.flip()
