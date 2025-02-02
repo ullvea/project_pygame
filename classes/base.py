@@ -22,7 +22,7 @@ stop_sound = False
 showsettings = False
 
 score = 0
-score_text = pygame.font.Font('font.ttf', 40)
+score_text = pygame.font.Font('data\\font\\font.ttf', 40)
 score_surface = score_text.render(str(score), True, pygame.Color('white'))
 score_rect = score_surface.get_rect(center=(20, 50))
 
@@ -110,8 +110,7 @@ class Button:
         else:
             pygame.draw.rect(screen, self.color, self.rect)
 
-        # заменить шрифт: comicsansms
-        font = pygame.font.Font('font.ttf', 30)
+        font = pygame.font.Font('data\\font\\font.ttf', 30)
         text_surface = font.render(self.text, True, pygame.Color('white'))
         text_rect = text_surface.get_rect(center=self.rect.center)
         screen.blit(text_surface, text_rect)
@@ -186,11 +185,13 @@ def update_score(new_score):  # Функция для обновления сч�
 
 
 def get_score():  # Функция для получения счёта игрока
+    global score
     return score
 
 
 def draw_score():  # Функция для отрисовки счёта игрока
-    score_surface = score_text.render(str(score), True, pygame.Color('white'))
+    global score
+    score_surface = score_text.render(str(get_score()), True, pygame.Color('white'))
     screen.blit(score_surface, score_rect)
 
 

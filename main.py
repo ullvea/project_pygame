@@ -14,9 +14,10 @@ class Map:
                         1: load_pygame('tmx_files\\lvl2.tmx'),
                         2: load_pygame('tmx_files\\lvl3.tmx')}
         self.key = 0
-        self.current_level = FirstLevel(self.tmx_map[2])
+        self.current_level = FirstLevel(self.tmx_map[0])
 
     def run(self, stop_game):
+        global score
         self.current_level.run(stop_game)
         if pygame.sprite.spritecollideany(self.current_level.kirby, next_lvl_sprites):
             loading()
@@ -102,12 +103,15 @@ class ReturnButton(Button):
         super().__init__(x, y, width, height, text)
 
     def event(self, event):
-        global showsettings
+        global showsettings, stop_game
         super().event(event)
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 showsettings = False
+                stop_game = False
+                update_score(0)  # Начинаем счёт сначала
+                clear_groups()
                 main_menu()
 
 
@@ -118,12 +122,14 @@ class AgainButton(Button):
         super().__init__(x, y, width, height, text)
 
     def event(self, event):
-        global showsettings
+        global showsettings, stop_game
         super().event(event)
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 showsettings = False
+                update_score(0) # Начинаем счёт сначала
+                clear_groups()
                 main()
 
 
@@ -207,7 +213,7 @@ def loading():  # Функция загрузки, используется пр
     image_cur = load_image("yellow_cursor2.png")
     running = True
 
-    font = pygame.font.Font('font.ttf', 50)
+    font = pygame.font.Font('data\\font\\font.ttf', 50)
     text_surface1 = font.render('loading', True, pygame.Color('black'))
     text_surface2 = font.render('loading.', True, pygame.Color('black'))
     text_surface3 = font.render('loading..', True, pygame.Color('black'))
@@ -220,8 +226,8 @@ def loading():  # Функция загрузки, используется пр
     cnt = 0  # Индекс показываемой картинки
     frames = []
     delay = 75
-    for filename in os.listdir("loading"):  # Загружаем картинки
-        frame = pygame.image.load(os.path.join("loading", filename))
+    for filename in os.listdir("data\\loading"):  # Загружаем картинки
+        frame = pygame.image.load(os.path.join("data\\loading", filename))
         frames.append(frame)
     image_ind = 0
     last_delay = pygame.time.get_ticks()
@@ -348,7 +354,7 @@ def rule():  # Функция для отображения правил
     back_ground = load_image("clouds_rules.jpg")
     back_ground = pygame.transform.scale(back_ground, (700, 525))
 
-    font = pygame.font.Font('1stenterprises3D.ttf', 100)
+    font = pygame.font.Font('data\\font\\1stenterprises3D.ttf', 100)
     text_surface = font.render('RULES', True, pygame.Color('black'))
     text_rect = text_surface.get_rect(center=(350, 100))
 
@@ -401,7 +407,7 @@ def main_menu():  # Функция для отображения главног�
     max_result = str(cur.execute("""SELECT max_results FROM score""").fetchone()[0])
     last_result = str(cur.execute("""SELECT last_results FROM score""").fetchone()[0])
 
-    font = pygame.font.Font('font.ttf', 30)
+    font = pygame.font.Font('data\\font\\font.ttf', 30)
     text_surface = font.render(f"MAX SCORE: {max_result}", True, pygame.Color('black'))
     text_rect = text_surface.get_rect()
     text_rect.center = (260, 270)

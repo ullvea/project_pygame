@@ -18,7 +18,7 @@ class Mushroom(pygame.sprite.Sprite):
         global score
         if pygame.sprite.spritecollideany(self, kirby_sprites):
             self.player.hearts.flag = True
-            score -= 2
+            score = get_score() - 2
             update_score(score)
             self.kill()
 
@@ -52,7 +52,7 @@ class Fly(pygame.sprite.Sprite):
 
         if pygame.sprite.spritecollideany(self, kirby_sprites):
             self.player.hearts.flag = True
-            score -= 5
+            score = get_score() - 5
             update_score(score)
             self.kill()
 
@@ -180,7 +180,7 @@ class WaddleDoo(pygame.sprite.Sprite):
 
             new_width = int(self.image.get_width() * 0.7)
             new_height = int(self.image.get_height() * 0.7)
-            if new_width == 0 or new_height == 0:
+            if new_width == 0 and new_height == 0:
                 score += 15
                 update_score(score)
                 self.kill()
