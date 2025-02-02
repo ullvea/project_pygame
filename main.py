@@ -209,6 +209,31 @@ class MapButton(ImageButton):
                 map()
 
 
+def map():
+    lvl1_map = load_image("all_level_map.png")
+    back_ground = pygame.transform.scale(lvl1_map, (700, 525))
+    font = pygame.font.Font('data\\font\\1stenterprises3D.ttf', 70)
+    text_surface = font.render('LEVEL MAP', True, pygame.Color('black'))
+    text_rect = text_surface.get_rect(center=(350, 100))
+    return_button = ReturnButton(10, 10, 100, 50, "MENU")
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            return_button.event(event)
+        screen.blit(back_ground, (0, 0))
+        return_button.draw()
+        screen.blit(text_surface, text_rect)
+        if pygame.mouse.get_focused():
+            x, y = pygame.mouse.get_pos()  # изображение курсора
+            screen.blit(image_cur, (x, y))
+        pygame.mouse.set_visible(False)
+        pygame.display.flip()
+        clock.tick(FPS)
+    pygame.quit()
+
+
 def loading():  # Функция загрузки, используется при переходе с уровня на уровень
     running = True
 
@@ -398,7 +423,8 @@ def main_menu():  # Функция для отображения главног�
     exit_button = ExitButton(WIDTH // 2 - 75, 440, 150, 50, "EXIT")
     rules_button = RulesButton(WIDTH // 2 - 75, 310, 150, 50, "RULES")
     settings_button = SettingsButton(WIDTH // 2 - 75, 370, 150, 50, "SETTINGS")
-    menu_btns = [play_button, exit_button, rules_button, settings_button]  # Объединяем кнопки главного меню
+    map_button = MapButton((400, 320), 'map_icon_earth.png', 'map_icon_earth_hovered.png', scale=0.25)
+    menu_btns = [play_button, exit_button, rules_button, settings_button, map_button]  # Объединяем кнопки главного меню
 
     # То, что будет показываться при открытии настроек
     max_result = str(cur.execute("""SELECT max_results FROM score""").fetchone()[0])
