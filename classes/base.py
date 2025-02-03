@@ -30,7 +30,7 @@ score_rect = score_surface.get_rect(center=(20, 50))
 
 menu_sound = pygame.mixer.Sound('sound\\menu_sound.mp3')
 defeat_sound = pygame.mixer.Sound('sound\\game_over_sound.mp3')
-lvl1_sound = pygame.mixer.Sound('sound\\1lvl_sound.mp3')
+lvl_sound = pygame.mixer.Sound('sound\\1lvl_sound.mp3')
 
 con = sqlite3.connect('BD')
 cur = con.cursor()
@@ -207,7 +207,7 @@ def get_state_sound():
 
 def load_image(name, colorkeys=None, scale=2):
     '''Функция для загрузки изображений с обесцвечиванием нескольких цветов'''
-    fullname = os.path.join('data', name)
+    fullname = os.path.join('data\\images', name)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()

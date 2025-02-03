@@ -4,7 +4,7 @@ from classes.base import *
 from classes.first_level import FirstLevel
 from classes.objects import *
 import pygame.mixer
-key = 0
+key = int(cur.execute("""SELECT key FROM score""").fetchone()[0])
 
 
 class Map:
@@ -208,22 +208,56 @@ class MapButton(ImageButton):
             if self.hovered:
                 map()
 
+class StartButton(ImageButton):
+    """Класс, отвечающий за создание кнопки для перехода на уровень"""
+
+    def __init__(self, pos, image, hovered_image, scale):
+        super().__init__(pos, image, hovered_image, scale)
+
+    def event(self, event):
+        super().event(event)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Проверка нажатия кнопки мыши
+            if self.hovered:
+                pass
+
 
 def map():
-    lvl1_map = load_image("all_level_map.png")
-    back_ground = pygame.transform.scale(lvl1_map, (700, 525))
+    lvl1_map = load_image("1lvl_map.png")
+    back_ground1 = pygame.transform.scale(lvl1_map, (700, 525))
+    lvl2_map = load_image("2lvl_map.png")
+    back_ground2 = pygame.transform.scale(lvl2_map, (700, 525))
+    lvl3_map = load_image("3lvl_map.png")
+    back_ground3 = pygame.transform.scale(lvl3_map, (700, 525))
+    back_ground = [back_ground1, back_ground2, back_ground3]
+
     font = pygame.font.Font('data\\font\\1stenterprises3D.ttf', 70)
     text_surface = font.render('LEVEL MAP', True, pygame.Color('black'))
     text_rect = text_surface.get_rect(center=(350, 100))
+
     return_button = ReturnButton(10, 10, 100, 50, "MENU")
+    start1_btn = StartButton((150, 370), 'start_btn.png', 'start_btn_hovered.png', scale=0.5)
+    start2_btn = StartButton((430, 425), 'start_btn.png', 'start_btn_hovered.png', scale=0.5)
+    start3_btn = StartButton((595, 250), 'start_btn.png', 'start_btn_hovered.png', scale=0.5)
+
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             return_button.event(event)
-        screen.blit(back_ground, (0, 0))
+            start1_btn.event(event)
+            if key >= 1:
+                start2_btn.event(event)
+            if key >= 2:
+                start3_btn.event(event)
+        screen.blit(back_ground[key], (0, 0))
         return_button.draw()
+        start1_btn.draw()
+        if key >= 1:
+            start2_btn.draw()
+        if key >= 2:
+            start3_btn.draw()
         screen.blit(text_surface, text_rect)
         if pygame.mouse.get_focused():
             x, y = pygame.mouse.get_pos()  # изображение курсора
@@ -286,6 +320,10 @@ def main():
     global stop_game
     defeat_sound_play = False
 
+    menu_sound.stop()
+    lvl_sound.stop()
+    lvl_sound.play(-1)
+
     strip_image = pygame.image.load('data\\Objects_images\\strip.png')
     strip_image = pygame.transform.scale(strip_image, (700, 80))
     image_finish = load_image("idiot.jpg")
@@ -329,6 +367,7 @@ def main():
 
         if stop_game_defeat:  # Если игра остановленна в случае ПОРАЖЕНИЯ
             menu_sound.stop()
+            lvl_sound.stop()
             if not defeat_sound_play:
                 defeat_sound.play()
                 defeat_sound_play = True
@@ -357,6 +396,7 @@ def main():
                 sound_btn.event(event)
             else:
                 sound_not_btn.draw()
+                lvl_sound.stop()
                 sound_not_btn.event(event)
 
         if pygame.mouse.get_focused():
@@ -411,6 +451,7 @@ def rule():  # Функция для отображения правил
 def main_menu():  # Функция для отображения главного меню
     global showsettings
     menu_sound.stop()
+    lvl_sound.stop()
     menu_sound.play(-1)
     back_ground = load_image("clouds.jpg")
 
