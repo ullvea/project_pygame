@@ -119,6 +119,8 @@ class ReturnButton(Button):
             if self.hovered:
                 showsettings = False
                 stop_game = False
+                cur.execute(f"""UPDATE score SET last_results = {get_score()}""")
+                con.commit()
                 update_score(0)  # Начинаем счёт сначала
                 clear_groups()
                 main_menu()
@@ -139,6 +141,8 @@ class AgainButton(Button):
                 showsettings = False
                 update_score(0)  # Начинаем счёт сначала
                 clear_groups()
+                cur.execute(f"""UPDATE score SET last_results = {get_score()}""")
+                con.commit()
                 main()
 
 
@@ -598,4 +602,7 @@ def main_menu():  # Функция для отображения главног�
 
 
 if __name__ == "__main__":
-    main_menu()
+    try:
+        main_menu()
+    except Exception:
+        pass
