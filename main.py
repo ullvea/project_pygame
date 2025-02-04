@@ -4,11 +4,14 @@ from classes.base import *
 from classes.first_level import FirstLevel
 from classes.objects import *
 import pygame.mixer
-key = int(cur.execute("""SELECT key FROM score""").fetchone()[0])
+
+mx_key = int(cur.execute("""SELECT max_key FROM score""").fetchone()[0])
+key = mx_key
 
 
 class Map:
     """Класс, отвечающий за создание игры и переключение уровней"""
+
     def __init__(self):
         global key
         self.tmx_map = {0: load_pygame('tmx_files\\map_vegetable_vallue.tmx'),
@@ -17,7 +20,7 @@ class Map:
         self.current_level = FirstLevel(self.tmx_map[key])
 
     def run(self, stop_game):
-        global score, key
+        global score, key, mx_key
         self.current_level.run(stop_game)
         if pygame.sprite.spritecollideany(self.current_level.kirby, next_lvl_sprites):
             loading()
@@ -25,6 +28,8 @@ class Map:
                 key += 1
             clear_groups()
             cur.execute(f"""UPDATE score SET last_results = {get_score()}""")
+            mx_key = max(key, mx_key)
+            cur.execute(f"""UPDATE score SET max_key = {mx_key}""")
             max_result = cur.execute("""SELECT max_results FROM score""").fetchone()[0]
             if max_result < get_score():
                 cur.execute(f"""UPDATE score SET max_results = {get_score()}""")
@@ -128,7 +133,7 @@ class AgainButton(Button):
             # Проверка нажатия кнопки мыши
             if self.hovered:
                 showsettings = False
-                update_score(0) # Начинаем счёт сначала
+                update_score(0)  # Начинаем счёт сначала
                 clear_groups()
                 main()
 
@@ -208,21 +213,25 @@ class MapButton(ImageButton):
             if self.hovered:
                 map()
 
+
 class StartButton(ImageButton):
     """Класс, отвечающий за создание кнопки для перехода на уровень"""
 
-    def __init__(self, pos, image, hovered_image, scale):
+    def __init__(self, pos, image, hovered_image, scale, key=0):
         super().__init__(pos, image, hovered_image, scale)
+        self.key = key
 
     def event(self, event):
+        global key
         super().event(event)
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Проверка нажатия кнопки мыши
             if self.hovered:
-                pass
+                key = self.key
+                main()
 
 
-def map():
+def map(): # Функция показывает карту уровней
     lvl1_map = load_image("1lvl_map.png")
     back_ground1 = pygame.transform.scale(lvl1_map, (700, 525))
     lvl2_map = load_image("2lvl_map.png")
@@ -236,9 +245,9 @@ def map():
     text_rect = text_surface.get_rect(center=(350, 100))
 
     return_button = ReturnButton(10, 10, 100, 50, "MENU")
-    start1_btn = StartButton((150, 370), 'start_btn.png', 'start_btn_hovered.png', scale=0.5)
-    start2_btn = StartButton((430, 425), 'start_btn.png', 'start_btn_hovered.png', scale=0.5)
-    start3_btn = StartButton((595, 250), 'start_btn.png', 'start_btn_hovered.png', scale=0.5)
+    start1_btn = StartButton((150, 370), 'start_btn.png', 'start_btn_hovered.png', scale=0.5, key=0)
+    start2_btn = StartButton((430, 425), 'start_btn.png', 'start_btn_hovered.png', scale=0.5, key=1)
+    start3_btn = StartButton((595, 250), 'start_btn.png', 'start_btn_hovered.png', scale=0.5, key=2)
 
     running = True
     while running:
@@ -247,16 +256,16 @@ def map():
                 running = False
             return_button.event(event)
             start1_btn.event(event)
-            if key >= 1:
+            if mx_key >= 1:
                 start2_btn.event(event)
-            if key >= 2:
+            if mx_key >= 2:
                 start3_btn.event(event)
-        screen.blit(back_ground[key], (0, 0))
+        screen.blit(back_ground[mx_key], (0, 0))
         return_button.draw()
         start1_btn.draw()
-        if key >= 1:
+        if mx_key >= 1:
             start2_btn.draw()
-        if key >= 2:
+        if mx_key >= 2:
             start3_btn.draw()
         screen.blit(text_surface, text_rect)
         if pygame.mouse.get_focused():
@@ -315,8 +324,29 @@ def loading():  # Функция загрузки, используется пр
         pygame.display.flip()
         clock.tick(FPS)
 
+def last_screen():
+    running = True
+    font = pygame.font.Font('data\\font\\font.ttf', 50)
+    text_surface1 = font.render('loading', True, pygame.Color('black'))
+    text_rect = text_surface1.get_rect(center=(350, 100))
+    background = load_image('last_screen.png')
+    background = pygame.transform.scale(background, (700, 525))
 
-def main():
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        screen.blit(background, (0,0))
+
+        if pygame.mouse.get_focused():
+            x, y = pygame.mouse.get_pos()
+            # изображение курсора
+            screen.blit(image_cur, (x, y))
+        pygame.mouse.set_visible(False)
+        pygame.display.flip()
+        clock.tick(FPS)
+
+def main(): # Функция отвечает за игровой процесс
     global stop_game
     defeat_sound_play = False
 
@@ -332,7 +362,7 @@ def main():
     fail_kirbi = pygame.transform.scale(fail_kirbi, (170, 150))
 
     gray_color = (
-    128, 128, 128)  # Используем серый цвет, поверх игрового процесса для красивого процесса остановки игры
+        128, 128, 128)  # Используем серый цвет, поверх игрового процесса для красивого процесса остановки игры
     mask_alpha = 200
 
     return_button = ReturnButton(100, 400, 100, 50, "MENU")
@@ -538,4 +568,5 @@ def main_menu():  # Функция для отображения главног�
 
 
 if __name__ == "__main__":
-    main_menu()
+    #main_menu()
+    last_screen()
