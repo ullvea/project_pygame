@@ -31,6 +31,7 @@ score_rect = score_surface.get_rect(center=(20, 50))
 menu_sound = pygame.mixer.Sound('sound\\menu_sound.mp3')
 defeat_sound = pygame.mixer.Sound('sound\\game_over_sound.mp3')
 lvl_sound = pygame.mixer.Sound('sound\\1lvl_sound.mp3')
+end_sound = pygame.mixer.Sound('sound\\pishuschaya-mashinka.mp3')
 
 con = sqlite3.connect('BD')
 cur = con.cursor()

@@ -1,4 +1,5 @@
 import sys
+import time
 
 from classes.base import *
 from classes.first_level import FirstLevel
@@ -23,7 +24,10 @@ class Map:
         global score, key, mx_key
         self.current_level.run(stop_game)
         if pygame.sprite.spritecollideany(self.current_level.kirby, next_lvl_sprites):
-            loading()
+            if key <= len(self.tmx_map) - 2:
+                loading()
+            else:
+                last_screen()
             if key + 1 < len(self.tmx_map):
                 key += 1
             clear_groups()
@@ -231,7 +235,7 @@ class StartButton(ImageButton):
                 main()
 
 
-def map(): # Функция показывает карту уровней
+def map():  # Функция показывает карту уровней
     lvl1_map = load_image("1lvl_map.png")
     back_ground1 = pygame.transform.scale(lvl1_map, (700, 525))
     lvl2_map = load_image("2lvl_map.png")
@@ -324,19 +328,40 @@ def loading():  # Функция загрузки, используется пр
         pygame.display.flip()
         clock.tick(FPS)
 
+
 def last_screen():
     running = True
-    font = pygame.font.Font('data\\font\\font.ttf', 50)
-    text_surface1 = font.render('loading', True, pygame.Color('black'))
-    text_rect = text_surface1.get_rect(center=(350, 100))
+    lvl_sound.stop()
+    menu_sound.stop()
+    end_sound.play()
+    font = pygame.font.Font('data\\font\\font.ttf', 40)
+    text = "New levels are coming soon..."
     background = load_image('last_screen.png')
     background = pygame.transform.scale(background, (700, 525))
+    return_button_pause = ReturnButton(300, 460, 100, 50, "MENU")
+    delay = 100
+    last_update_time = pygame.time.get_ticks()
+    i = 0
+    current_text = ''
 
     while running:
+        current_time = pygame.time.get_ticks()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        screen.blit(background, (0,0))
+            return_button_pause.event(event)
+        screen.blit(background, (0, 0))
+
+        if current_time - last_update_time >= delay and i < len(text):
+            current_text += text[i]
+            i += 1
+            last_update_time = current_time
+        rendered_text = font.render(current_text, True, (255, 255, 255))
+        screen.blit(rendered_text, (30, 200))  # Позиция текста на экране
+        return_button_pause.draw()
+
+        if get_state_sound():
+            end_sound.stop()
 
         if pygame.mouse.get_focused():
             x, y = pygame.mouse.get_pos()
@@ -346,7 +371,8 @@ def last_screen():
         pygame.display.flip()
         clock.tick(FPS)
 
-def main(): # Функция отвечает за игровой процесс
+
+def main():  # Функция отвечает за игровой процесс
     global stop_game
     defeat_sound_play = False
 
@@ -428,6 +454,9 @@ def main(): # Функция отвечает за игровой процесс
                 sound_not_btn.draw()
                 lvl_sound.stop()
                 sound_not_btn.event(event)
+        if get_state_sound():
+            lvl_sound.stop()
+            defeat_sound.stop()
 
         if pygame.mouse.get_focused():
             x, y = pygame.mouse.get_pos()
@@ -482,6 +511,7 @@ def main_menu():  # Функция для отображения главног�
     global showsettings
     menu_sound.stop()
     lvl_sound.stop()
+    end_sound.stop()
     menu_sound.play(-1)
     back_ground = load_image("clouds.jpg")
 
@@ -568,5 +598,4 @@ def main_menu():  # Функция для отображения главног�
 
 
 if __name__ == "__main__":
-    #main_menu()
-    last_screen()
+    main_menu()

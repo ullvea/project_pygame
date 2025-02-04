@@ -37,6 +37,7 @@ class Fly(pygame.sprite.Sprite):
         self.player = player
         self.speed = -6
         self.orientation = True
+        self.is_eaten = False
 
     def mirror(self):
         """Функция, отвечающая за отзеркаливание изображения"""
@@ -45,22 +46,47 @@ class Fly(pygame.sprite.Sprite):
 
     def move(self):
         global score
-        self.rect.x += self.speed
-        if pygame.sprite.spritecollideany(self, self.obstacle_sprites):
-            self.speed *= -1
-            self.orientation = not self.orientation
 
-        if pygame.sprite.spritecollideany(self, kirby_sprites):
-            self.player.hearts.flag = True
-            score = get_score() - 5
-            update_score(score)
-            self.kill()
+        keys = pygame.key.get_pressed()
+        distance = math.sqrt((self.rect.centerx - self.player.rect.centerx) ** 2 +
+                             (self.rect.centery - self.player.rect.centery) ** 2)
+        if ((keys[pygame.K_DOWN] or keys[pygame.K_s]) and distance <= 50 and
+                not (self.rect.x < self.player.rect.x and self.orientation == self.player.orientation)):
+            self.is_eaten = True
+        if not self.is_eaten:
+            self.rect.x += self.speed
+            if pygame.sprite.spritecollideany(self, self.obstacle_sprites):
+                self.speed *= -1
+                self.orientation = not self.orientation
+
+            if pygame.sprite.spritecollideany(self, kirby_sprites):
+                self.player.hearts.flag = True
+                score = get_score() - 5
+                update_score(score)
+                self.kill()
 
     def update(self):
+        global score
         self.move()
-        self.image = self.animation.image
-        self.animation.update()
-        self.mirror()
+        if self.is_eaten:  # Если съеден, то стремительно уменьшается
+            v_wd = pygame.math.Vector2(self.rect.center)
+            v_kirby = pygame.math.Vector2(self.player.rect.center)
+            s = v_kirby - v_wd
+            direction = s.normalize() if s.length() > 1 else s
+            self.rect.x += direction.x * 5
+            self.rect.y += direction.y * 5
+
+            new_width = int(self.image.get_width() * 0.5)
+            new_height = int(self.image.get_height() * 0.5)
+            if new_width == 0 and new_height == 0:
+                score += 10
+                update_score(score)
+                self.kill()
+            self.image = pygame.transform.smoothscale(self.image, (new_width, new_height))
+        else:
+            self.image = self.animation.image
+            self.animation.update()
+            self.mirror()
 
 
 class WaddleDoo(pygame.sprite.Sprite):
